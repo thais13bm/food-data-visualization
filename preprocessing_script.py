@@ -5,6 +5,12 @@ import seaborn as sns
 import re
 
 df = pd.read_csv('data/recipes.csv')
+df_reviews = pd.read_csv('data/reviews.csv')
+
+
+df_reviews_grouped = df_reviews.groupby('RecipeId')['Review'].apply(list).reset_index()
+df = pd.merge(df, df_reviews_grouped, left_on='RecipeId', right_on='RecipeId', how='outer')
+
 
 def parse_r_c_list(value):
     if isinstance(value, str) and value.strip().startswith('c('):
@@ -82,6 +88,7 @@ for col in ['CookTime', 'PrepTime', 'TotalTime']:
 
 df[['CookTime', 'PrepTime', 'TotalTime', 'CookTime_hours', 'PrepTime_hours', 'TotalTime_hours']].head()
 df['CookTime'].fillna(0, inplace = True)
+df['ReviewCount'].fillna(0, inplace = True)
 
 
 df.to_csv('data/recipes_cleaned.csv', index=False)
