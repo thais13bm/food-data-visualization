@@ -7,8 +7,6 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function Home() {
   const { data, error, isLoading } = useSWR("/api/recipes", fetcher);
 
-  console.log("Data:", data);
-
   if (isLoading)
     return <p className="p-6 text-gray-700">Carregando receitas...</p>;
   if (error) return <p className="p-6 text-red-500">Erro ao carregar dados!</p>;
