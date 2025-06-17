@@ -14,7 +14,7 @@ export default function Home() {
   if (error) return <p className="p-6 text-red-500">Erro ao carregar dados!</p>;
 
   return (
-    <div className="max-w-6xl mx-auto flex flex-col gap-12 pb-10">
+    <div className="max-w-6xl mx-auto flex flex-col gap-6 pb-10">
       <header>
         <h2 className="text-4xl font-extrabold mb-2">
           Bem-vindo ao ReceitaVis!
