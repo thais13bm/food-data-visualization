@@ -3,6 +3,7 @@
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 interface ImageCarouselProps {
   images: string[];
@@ -34,11 +35,13 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
       className="keen-slider rounded-lg overflow-hidden w-full"
     >
       {images.map((img, index) => (
-        <div key={index} className="keen-slider__slide">
-          <img
+        <div key={index} className="keen-slider__slide relative h-[400px]">
+          <Image
             src={img}
             alt={`Recipe image ${index}`}
-            className="w-full h-120 object-cover"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 600px"
           />
         </div>
       ))}
