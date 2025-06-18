@@ -7,6 +7,8 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function Home() {
   const { data, error, isLoading } = useSWR("/api/recipes", fetcher);
 
+  console.log(data);
+
   if (isLoading)
     return <p className="p-6 text-gray-700">Carregando receitas...</p>;
   if (error) return <p className="p-6 text-red-500">Erro ao carregar dados!</p>;
@@ -26,22 +28,26 @@ export default function Home() {
       {data &&
         data.length > 0 &&
         (() => {
-          const images = data
+          const recipes = data
             .map((recipe) => {
               try {
                 const parsed = JSON.parse(recipe.Images.replace(/'/g, '"'));
-                return parsed?.[0];
+                return {
+                  img: parsed?.[0],
+                  name: recipe.Name,
+                  autor: recipe.AuthorName,
+                  igredients: recipe.RecipeIngredientParts,
+                  category: recipe.RecipeCategory,
+                };
               } catch {
                 return null;
               }
             })
-            .filter((url) => url && url.startsWith("http"));
+            .filter((r) => r?.img && r.img.startsWith("http"));
+
           return (
             <section className="bg-white dark:bg-gray-900 p-2 rounded-lg shadow">
-              {/* <h3 className="text-2xl font-semibold mb-2">
-                Imagens de Receitas
-              </h3> */}
-              <ImageCarousel images={images} />
+              <ImageCarousel recipes={recipes} />
             </section>
           );
         })()}

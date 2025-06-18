@@ -3,6 +3,9 @@ import fs from "fs";
 import path from "path";
 import csv from "csv-parser";
 
+// USAR ESSA ROTA SÓ SE QUISER PEGAR UMA PEQUENA PARCELA DAS RECEITAS (1000)
+// VOU MANTER PRO SLIDE DA PAGINA INICIAL POR AGORA
+
 export async function GET() {
   const filePath = path.join(
     process.cwd(),
@@ -17,9 +20,8 @@ export async function GET() {
     const stream = fs.createReadStream(filePath).pipe(csv());
 
     for await (const row of stream) {
-      // Aqui você pode fazer um slice() ou filter para não carregar tudo
       results.push(row);
-      if (results.length >= 1000) break; // por exemplo: só os primeiros 1000
+      if (results.length >= 1000) break; // só os primeiros 1000
     }
 
     return NextResponse.json(results);

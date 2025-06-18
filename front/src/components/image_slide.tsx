@@ -5,11 +5,19 @@ import "keen-slider/keen-slider.min.css";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 
-interface ImageCarouselProps {
-  images: string[];
+interface Recipe {
+  img: string;
+  name: string;
+  autor: string;
+  igredients: string;
+  category: string;
 }
 
-export default function ImageCarousel({ images }: ImageCarouselProps) {
+interface ImageCarouselProps {
+  recipes: Recipe[];
+}
+
+export default function ImageCarousel({ recipes }: ImageCarouselProps) {
   const timer = useRef<NodeJS.Timeout | null>(null);
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
@@ -23,7 +31,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
 
     timer.current = setInterval(() => {
       instanceRef.current?.next();
-    }, 3000);
+    }, 5000);
     return () => {
       if (timer.current) clearInterval(timer.current);
     };
@@ -34,15 +42,36 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
       ref={sliderRef}
       className="keen-slider rounded-lg overflow-hidden w-full"
     >
-      {images.map((img, index) => (
-        <div key={index} className="keen-slider__slide relative h-[400px]">
-          <Image
-            src={img}
-            alt={`Recipe image ${index}`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 600px"
-          />
+      {recipes.map((recipe, index) => (
+        <div
+          key={index}
+          className="keen-slider__slide flex gap-6 items-center p-6"
+        >
+          <div className="relative w-[400px] h-[400px] shrink-0">
+            <Image
+              src={recipe.img}
+              alt={`Imagem da receita ${index}`}
+              fill
+              className="object-contain rounded-md"
+              sizes="(max-width: 768px) 100vw, 400px"
+            />
+          </div>
+          <div className="flex-1 text-gray-800 dark:text-gray-200">
+            <h2 className="text-2xl font-bold mb-2">{recipe.name}</h2>
+
+            {recipe.autor && (
+              <p className="text-sm">
+                <span className="font-semibold">Autor:</span> {recipe.autor}
+              </p>
+            )}
+
+            {recipe.category && (
+              <p className="text-sm mb-1">
+                <span className="font-semibold">Categoria:</span>{" "}
+                {recipe.category}
+              </p>
+            )}
+          </div>
         </div>
       ))}
     </div>
