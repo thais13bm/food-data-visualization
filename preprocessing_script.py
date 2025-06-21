@@ -11,7 +11,7 @@ df_reviews = pd.read_csv('data/reviews.csv')
 df_reviews_grouped = df_reviews.groupby('RecipeId')['Review'].apply(list).reset_index()
 df = pd.merge(df, df_reviews_grouped, left_on='RecipeId', right_on='RecipeId', how='outer')
 
-
+### tem um caso das imagens que nao tem o c() na frente, precisamos tratar
 def parse_r_c_list(value):
     if isinstance(value, str) and value.strip().startswith('c('):
         # Remove o "c(" no início e ")" no final
