@@ -1,4 +1,5 @@
 "use client";
+
 import ImageCarousel from "@/components/image_slide";
 import useSWR from "swr";
 
@@ -6,8 +7,6 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Home() {
   const { data, error, isLoading } = useSWR("/api/recipes", fetcher);
-
-  console.log(data);
 
   if (isLoading)
     return <p className="p-6 text-gray-700">Carregando receitas...</p>;

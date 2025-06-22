@@ -1,35 +1,112 @@
 "use client";
 
-import CaloriesBarChart from "@/components/charts/calories_barchart";
+import { useState } from "react";
 import useSWR from "swr";
+import { Multiselect } from "@/components/ui/multiselect";
+import dynamic from "next/dynamic";
+
+const BarChart = dynamic(() => import("@/components/charts/barchart"), {
+  ssr: false,
+});
+
+interface Recipe {
+  RecipeCategory: string;
+}
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function TrendsPage() {
-  const { data, error, isLoading } = useSWR("/api/recipes", fetcher);
+  const {
+    data = [],
+    error,
+    isLoading,
+  } = useSWR<Recipe[]>("/api/recipes", fetcher);
+  const [selectedCategories, setSelectedCategories] = useState<
+    { name: string }[]
+  >([{ name: "All" }]);
 
-  if (isLoading) return <p className="p-6">Carregando receitas...</p>;
-  if (error)
-    return <p className="p-6 text-red-500">Erro ao carregar receitas.</p>;
+  const [open, setOpen] = useState(false);
+  const [topN, setTopN] = useState(10);
 
+  if (isLoading) return <p>Carregando...</p>;
+  if (error) return <p>Erro ao carregar dados</p>;
 
-  const chartData = (data ?? [])
-    .map((item: any) => ({
-      Name: item.Name || item.name || "Sem nome",
-      calories: Number(item.calories ?? item.Calories ?? 0),
-    }))
-    .filter((d) => !isNaN(d.calories));
+  const rawCategories = Array.from(
+    new Set(data.map((d: any) => d.RecipeCategory).filter(Boolean))
+  ).map((name) => ({ name }));
+
+  const allCategories = [{ name: "All" }, ...rawCategories];
 
   return (
-    <main className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Tendências</h1>
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
+      <div className="flex flex-wrap items-center gap-4">
+        <Multiselect
+          data={allCategories}
+          open={open}
+          onOpenChange={setOpen}
+          modal={false}
+          optionKey="name"
+          optionValue="name"
+          optionLabel="name"
+          selectedOptions={selectedCategories}
+          onSelect={(item) => {
+            if (item.name === "All") {
+              setSelectedCategories([{ name: "All" }]);
+              return;
+            }
 
-      <section className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-4">
-          Top 10 Receitas com Mais Calorias
-        </h2>
-        <CaloriesBarChart data={chartData} />
-      </section>
-    </main>
+            let newSelected = selectedCategories.filter(
+              (c) => c.name !== "All"
+            );
+
+            if (selectedCategories.find((c) => c.name === item.name)) {
+              newSelected = newSelected.filter((c) => c.name !== item.name);
+            } else {
+              newSelected.push(item);
+            }
+
+            if (newSelected.length === rawCategories.length) {
+              setSelectedCategories([{ name: "All" }]);
+            } else {
+              setSelectedCategories(newSelected);
+            }
+          }}
+          onRemove={(item) => {
+            if (item.name === "All") {
+              setSelectedCategories([]);
+              return;
+            }
+            setSelectedCategories(
+              selectedCategories.filter(
+                (c) => c.name !== item.name && c.name !== "All"
+              )
+            );
+          }}
+          buttonPlaceholder="Selecione categorias"
+          filterPlaceholder="Filtrar categorias..."
+        />
+
+        <div className="flex flex-col">
+          <label htmlFor="topN" className="text-sm font-medium text-gray-700">
+            Quantidade de receitas (top N)
+          </label>
+          <input
+            id="topN"
+            type="number"
+            min={1}
+            max={50}
+            value={topN}
+            onChange={(e) => setTopN(Number(e.target.value))}
+            className="border rounded p-2 w-20 h-9 text-center"
+          />
+        </div>
+      </div>
+
+      <BarChart
+        data={data}
+        selectedCategories={selectedCategories.map((c) => c.name)}
+        topN={topN}
+      />
+    </div>
   );
 }
