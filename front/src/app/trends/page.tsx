@@ -4,6 +4,7 @@ import { useState } from "react";
 import useSWR from "swr";
 import { Multiselect } from "@/components/ui/multiselect";
 import dynamic from "next/dynamic";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const BarChart = dynamic(() => import("@/components/charts/barchart"), {
   ssr: false,
@@ -86,27 +87,38 @@ export default function TrendsPage() {
           filterPlaceholder="Filtrar categorias..."
         />
 
-        <div className="flex flex-col">
-          <label htmlFor="topN" className="text-sm font-medium text-gray-700">
-            Quantidade de receitas (top N)
-          </label>
-          <input
-            id="topN"
-            type="number"
-            min={1}
-            max={50}
-            value={topN}
-            onChange={(e) => setTopN(Number(e.target.value))}
-            className="border rounded p-2 w-20 h-9 text-center"
-          />
-        </div>
+        <Card>
+          <CardContent>
+            <div className="flex flex-col items-center gap-2">
+              <label htmlFor="topN" className="text-base font-semibold">
+                Quantidade de receitas (top N)
+              </label>
+              <input
+                id="topN"
+                type="number"
+                min={1}
+                max={50}
+                value={topN}
+                onChange={(e) => setTopN(Number(e.target.value))}
+                className="border rounded p-2 w-24 h-9 text-center"
+              />
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      <BarChart
-        data={data}
-        selectedCategories={selectedCategories.map((c) => c.name)}
-        topN={topN}
-      />
+      <Card>
+        <CardHeader className="text-center">
+          {/* <CardTitle>Num sei</CardTitle> */}
+        </CardHeader>
+        <CardContent>
+          <BarChart
+            data={data}
+            selectedCategories={selectedCategories.map((c) => c.name)}
+            topN={topN}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 }

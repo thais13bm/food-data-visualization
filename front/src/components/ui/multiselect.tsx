@@ -58,7 +58,9 @@ export function Multiselect<T>({
               variant={"outline"}
               className="w-full justify-between rounded-none rounded-t-xl"
             >
-              {buttonPlaceholder}
+              <span className="text-base font-semibold">
+                {buttonPlaceholder}
+              </span>
               <ChevronsUpDown className="opacity-50" />
             </Button>
 
