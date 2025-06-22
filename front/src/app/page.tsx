@@ -2,6 +2,7 @@
 
 import ImageCarousel from "@/components/image_slide";
 import useSWR from "swr";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -18,7 +19,7 @@ export default function Home() {
         <h2 className="text-4xl font-extrabold mb-2">
           Bem-vindo ao ReceitaVis!
         </h2>
-        <p className="text-lg text-gray-600 dark:text-gray-300">
+        <p className="text-lg text-gray-700">
           Sistema web interativo de análise de receitas. Explore as
           visualizações dos dados e descubra insights interessantes.
         </p>
@@ -45,27 +46,45 @@ export default function Home() {
             .filter((r) => r?.img && r.img.startsWith("http"));
 
           return (
-            <section className="bg-white dark:bg-gray-900 p-2 rounded-lg shadow">
-              <ImageCarousel recipes={recipes} />
-            </section>
+            <Card className="bg-slate-50 text-slate-800 border border-slate-200 shadow">
+              <CardContent className="p-4">
+                <ImageCarousel recipes={recipes} />
+              </CardContent>
+            </Card>
           );
         })()}
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div className="bg-teal-100 dark:bg-teal-900 p-6 rounded-lg shadow hover:shadow-lg transition cursor-pointer">
-          <h3 className="text-xl font-semibold mb-3">Visão Geral</h3>
-          <p>Resumo rápido com gráficos básicos sobre o dataset de receitas.</p>
-        </div>
+        <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">Visão Geral</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>
+              Resumo rápido com gráficos básicos sobre o dataset de receitas.
+            </p>
+          </CardContent>
+        </Card>
 
-        <div className="bg-teal-100 dark:bg-teal-900 p-6 rounded-lg shadow hover:shadow-lg transition cursor-pointer">
-          <h3 className="text-xl font-semibold mb-3">Ingredientes</h3>
-          <p>Distribuição dos ingredientes mais usados nas receitas.</p>
-        </div>
+        <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">
+              Ingredientes
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>Distribuição dos ingredientes mais usados nas receitas.</p>
+          </CardContent>
+        </Card>
 
-        <div className="bg-teal-100 dark:bg-teal-900 p-6 rounded-lg shadow hover:shadow-lg transition cursor-pointer">
-          <h3 className="text-xl font-semibold mb-3">Categorias</h3>
-          <p>Análise por tipo de prato: doces, salgados, veganos, etc.</p>
-        </div>
+        <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">Categorias</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>Análise por tipo de prato: doces, salgados, veganos, etc.</p>
+          </CardContent>
+        </Card>
       </section>
     </div>
   );

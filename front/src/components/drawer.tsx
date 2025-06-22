@@ -8,7 +8,6 @@ interface DrawerProps {
 export default function Drawer({ open, onClose }: DrawerProps) {
   return (
     <>
-      {/* Overlay (quando drawer está aberto) */}
       <div
         onClick={onClose}
         className={`fixed inset-0 bg-gray-800/20 z-20 transition-opacity ${
@@ -16,14 +15,12 @@ export default function Drawer({ open, onClose }: DrawerProps) {
         }`}
       />
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-900 shadow-lg z-30 transform transition-transform ${
+        className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-50 shadow-lg z-30 transform transition-transform ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <nav className="flex flex-col p-6 gap-6 text-gray-900 dark:text-gray-100">
-          <h2 className="text-2xl font-bold mb-8 text-teal-600 dark:text-teal-400">
-            ReceitaVis
-          </h2>
+        <nav className="flex flex-col p-6 gap-6 text-gray-900">
+          <h2 className="text-2xl font-bold mb-8 text-teal-600">ReceitaVis</h2>
           <Link href="/" onClick={onClose} className="hover:text-teal-600">
             Home
           </Link>
