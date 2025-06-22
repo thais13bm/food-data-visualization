@@ -25,32 +25,11 @@ export default function Drawer({ open, onClose }: DrawerProps) {
             Home
           </Link>
           <Link
-            href="/overview"
-            onClick={onClose}
-            className="hover:text-teal-600"
-          >
-            Visão Geral
-          </Link>
-          <Link
-            href="/ingredients"
-            onClick={onClose}
-            className="hover:text-teal-600"
-          >
-            Ingredientes
-          </Link>
-          <Link
-            href="/categories"
-            onClick={onClose}
-            className="hover:text-teal-600"
-          >
-            Categorias
-          </Link>
-          <Link
             href="/trends"
             onClick={onClose}
             className="hover:text-teal-600"
           >
-            Tendências
+            Charts
           </Link>
         </nav>
       </aside>
