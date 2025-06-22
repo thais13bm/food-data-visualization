@@ -5,6 +5,13 @@ import useSWR from "swr";
 import { Multiselect } from "@/components/ui/multiselect";
 import dynamic from "next/dynamic";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const BarChart = dynamic(() => import("@/components/charts/barchart"), {
   ssr: false,
@@ -28,6 +35,7 @@ export default function TrendsPage() {
 
   const [open, setOpen] = useState(false);
   const [topN, setTopN] = useState(10);
+  const [xField, setXField] = useState("Calories");
 
   if (isLoading) return <p>Carregando...</p>;
   if (error) return <p>Erro ao carregar dados</p>;
@@ -87,9 +95,32 @@ export default function TrendsPage() {
           filterPlaceholder="Filtrar categorias..."
         />
 
-        <Card>
-          <CardContent>
-            <div className="flex flex-col items-center gap-2">
+        <div className="flex gap-4 items-stretch">
+          <Card className="h-full">
+            <CardContent className="h-full flex items-start justify-center">
+              <div className="w-full max-w-[200px]">
+                <label className="text-base font-semibold">
+                  Campo no eixo X
+                </label>
+                <Select value={xField} onValueChange={setXField}>
+                  <SelectTrigger className="w-full h-9 text-sm">
+                    <SelectValue placeholder="Escolha o campo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Calories">Calorias</SelectItem>
+                    <SelectItem value="FatContent">Gordura</SelectItem>
+                    <SelectItem value="ProteinContent">Proteína</SelectItem>
+                    <SelectItem value="CarbohydrateContent">
+                      Carboidratos
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="h-full">
+            <CardContent className="h-full flex flex-col items-center justify-center">
               <label htmlFor="topN" className="text-base font-semibold">
                 Quantidade de receitas (top N)
               </label>
@@ -102,9 +133,9 @@ export default function TrendsPage() {
                 onChange={(e) => setTopN(Number(e.target.value))}
                 className="border rounded p-2 w-24 h-9 text-center"
               />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <Card>
@@ -116,6 +147,7 @@ export default function TrendsPage() {
             data={data}
             selectedCategories={selectedCategories.map((c) => c.name)}
             topN={topN}
+            xField={xField}
           />
         </CardContent>
       </Card>

@@ -48,7 +48,7 @@ export function Multiselect<T>({
   filterPlaceholder,
 }: IMultiselect<T>) {
   return (
-    <div className="w-[500px]">
+    <div className="w-[300px]">
       <Popover open={open} onOpenChange={onOpenChange} modal={modal}>
         <PopoverTrigger asChild>
           <div>
@@ -64,7 +64,7 @@ export function Multiselect<T>({
               <ChevronsUpDown className="opacity-50" />
             </Button>
 
-            <div className="flex flex-wrap gap-2 border rounded-b-xl p-2 min-w-[500px]">
+            <div className="flex flex-wrap gap-2 border rounded-b-xl p-2 min-w-[300px]">
               {selectedOptions.length === 0 ? (
                 <p className="text-sm italic text-gray-500">
                   Nenhuma opção selecionada
@@ -94,7 +94,7 @@ export function Multiselect<T>({
         </PopoverTrigger>
 
         <PopoverContent
-          className="w-[500px] max-w-xl p-0 bg-white shadow-lg border z-50"
+          className="w-[300px] max-w-xl p-0 bg-white shadow-lg border z-50"
           side="bottom"
           align="start"
         >
@@ -109,6 +109,7 @@ export function Multiselect<T>({
                     key={element[optionKey] as React.Key}
                     value={element[optionValue] as string}
                     onSelect={() => onSelect(element)}
+                    className="hover:bg-gray-100 focus:bg-gray-100"
                   >
                     <div className="flex flex-col p-2 w-full gap-y-1">
                       <p className="text-md font-semibold">
