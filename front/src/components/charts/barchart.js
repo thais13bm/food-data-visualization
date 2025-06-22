@@ -10,6 +10,33 @@ export default function BarChart({ data, selectedCategories, topN, xField }) {
   useEffect(() => {
     if (!chartRef.current) return;
 
+    const unitsMap = {
+      Calories: "kcal",
+      FatContent: "g",
+      SugarContent: "g",
+      SodiumContent: "mg",
+      ProteinContent: "g",
+      CholesterolContent: "mg",
+      CarbohydrateContent: "g",
+      FiberContent: "g",
+      // adicione outros campos conforme necessário
+    };
+
+
+    function renameFieldWithUnit(data, xField, unitsMap) {
+      const unit = unitsMap[xField];
+      const newFieldName = unit ? `${xField} (${unit})` : xField;
+
+      const newData = data.map((item) => ({
+        ...item,
+        [newFieldName]: item[xField],
+      }));
+
+      return { data: newData, fieldName: newFieldName };
+    }
+
+
+
     const allCategories = [
       ...new Set(data.map((d) => d.RecipeCategory)),
     ].sort();
@@ -26,17 +53,23 @@ export default function BarChart({ data, selectedCategories, topN, xField }) {
       .sort((a, b) => b[xField] - a[xField])
       .slice(0, topN);
 
+    //const {renamedData, xField } = renameFieldWithUnit(top, xField, unitsMap);
+
+    const { data: preparedData, fieldName: xFieldLabel } = renameFieldWithUnit(top, xField, unitsMap);
+
+
     const spec = vl
       .markBar()
-      .data(top)
+      .data(preparedData)
       .encode(
-        vl.x().fieldQ(xField).title(xField),
-        vl.y().fieldN("Name").sort("-x").title("Receita"),
-        vl.color().fieldN("RecipeCategory").title("Categoria"),
+        vl.x().fieldQ(xFieldLabel).title(xFieldLabel),
+        vl.y().fieldN("Name").sort("-x").title("Recipe"),
+        vl.color().fieldN("RecipeCategory").title("Category"),
         vl.tooltip([
-          { field: "AuthorName", title: "Autor" },
-          { field: "Description", title: "Descrição" },
-          { field: xField, title: xField },
+          { field: "AuthorName", title: "Author" },
+          { field: "Description", title: "Description" },
+          { field: xFieldLabel, title: xFieldLabel },
+          { field: "RecipeId", title: "RecipeId" },
         ])
       )
       .width(600)

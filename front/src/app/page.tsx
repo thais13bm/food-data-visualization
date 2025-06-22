@@ -10,18 +10,18 @@ export default function Home() {
   const { data, error, isLoading } = useSWR("/api/recipes", fetcher);
 
   if (isLoading)
-    return <p className="p-6 text-gray-700">Carregando receitas...</p>;
-  if (error) return <p className="p-6 text-red-500">Erro ao carregar dados!</p>;
+    return <p className="p-6 text-gray-700">Loading recipes...</p>;
+  if (error) return <p className="p-6 text-red-500">Error loading data!</p>;
 
   return (
     <div className="max-w-6xl mx-auto flex flex-col gap-6 pb-10">
       <header>
         <h2 className="text-4xl font-extrabold mb-2">
-          Bem-vindo ao ReceitaVis!
+          Welcome to RecipeViz!
         </h2>
         <p className="text-lg text-gray-700">
-          Sistema web interativo de análise de receitas. Explore as
-          visualizações dos dados e descubra insights interessantes.
+          Interactive web system for recipe analysis. Explore data visualizations
+          and discover interesting insights. (Source: Food.com)
         </p>
       </header>
 
@@ -57,11 +57,11 @@ export default function Home() {
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
           <CardHeader>
-            <CardTitle className="text-xl font-semibold">Visão Geral</CardTitle>
+            <CardTitle className="text-xl font-semibold">General vision</CardTitle>
           </CardHeader>
           <CardContent>
             <p>
-              Resumo rápido com gráficos básicos sobre o dataset de receitas.
+                Quick summary with basic charts about the recipe dataset.            
             </p>
           </CardContent>
         </Card>
@@ -69,20 +69,20 @@ export default function Home() {
         <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
           <CardHeader>
             <CardTitle className="text-xl font-semibold">
-              Ingredientes
+              Ingredients
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p>Distribuição dos ingredientes mais usados nas receitas.</p>
+            <p>Distribution of most used ingredients</p>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
           <CardHeader>
-            <CardTitle className="text-xl font-semibold">Categorias</CardTitle>
+            <CardTitle className="text-xl font-semibold">Categories</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>Análise por tipo de prato: doces, salgados, veganos, etc.</p>
+            <p>Analysis by dish type: sweet, savory, vegan, etc.</p>
           </CardContent>
         </Card>
       </section>

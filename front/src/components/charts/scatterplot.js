@@ -41,10 +41,10 @@ export default function ScatterPlot({
       .encode(
         vl.x().fieldQ(xField).title(xField),
         vl.y().fieldQ(yField).title(yField),
-        vl.color().fieldN("RecipeCategory").title("Categoria"),
+        vl.color().fieldN("RecipeCategory").title("Category"),
         vl.tooltip([
-          { field: "Name", title: "Receita" },
-          { field: "AuthorName", title: "Autor" },
+          { field: "Name", title: "Recipe" },
+          { field: "AuthorName", title: "Author" },
           { field: xField, title: xField },
           { field: yField, title: yField },
         ])

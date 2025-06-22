@@ -15,7 +15,7 @@ export default function TopNav({
         ☰
       </button>
       <h1 className="text-lg font-semibold text-teal-700">
-        Sistema de Análise de Receitas
+        Recipes Visualization System
       </h1>
       <div>{/* espaço para perfil, busca etc */}</div>
     </header>

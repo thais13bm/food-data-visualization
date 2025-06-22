@@ -42,8 +42,8 @@ export default function TrendsPage() {
   const [xField, setXField] = useState("Calories");
   const [yField, setYField] = useState("ProteinContent");
 
-  if (isLoading) return <p>Carregando...</p>;
-  if (error) return <p>Erro ao carregar dados</p>;
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error loading data</p>;
 
   const rawCategories = Array.from(
     new Set(data.map((d: any) => d.RecipeCategory).filter(Boolean))
@@ -96,8 +96,8 @@ export default function TrendsPage() {
               )
             );
           }}
-          buttonPlaceholder="Selecione categorias"
-          filterPlaceholder="Filtrar categorias..."
+          buttonPlaceholder="Select categories"
+          filterPlaceholder="Filter categories..."
         />
 
         <div className="flex gap-4 items-stretch">
@@ -107,14 +107,14 @@ export default function TrendsPage() {
                 <label className="text-base font-semibold">X Field</label>
                 <Select value={xField} onValueChange={setXField}>
                   <SelectTrigger className="w-full h-9 text-sm">
-                    <SelectValue placeholder="Escolha o campo" />
+                    <SelectValue placeholder="Choose the field" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Calories">Calorias</SelectItem>
-                    <SelectItem value="FatContent">Gordura</SelectItem>
-                    <SelectItem value="ProteinContent">Proteína</SelectItem>
+                    <SelectItem value="Calories">Calories</SelectItem>
+                    <SelectItem value="FatContent">Fat Content</SelectItem>
+                    <SelectItem value="ProteinContent">Protein Content</SelectItem>
                     <SelectItem value="CarbohydrateContent">
-                      Carboidratos
+                      Carbohydrate Content
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -128,14 +128,14 @@ export default function TrendsPage() {
                 <label className="text-base font-semibold">Y Field</label>
                 <Select value={yField} onValueChange={setYField}>
                   <SelectTrigger className="w-full h-9 text-sm">
-                    <SelectValue placeholder="Escolha o campo" />
+                    <SelectValue placeholder="Choose the field" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Calories">Calorias</SelectItem>
-                    <SelectItem value="FatContent">Gordura</SelectItem>
-                    <SelectItem value="ProteinContent">Proteína</SelectItem>
+                    <SelectItem value="Calories">Calories</SelectItem>
+                    <SelectItem value="FatContent">Fat Content</SelectItem>
+                    <SelectItem value="ProteinContent">Protein Content</SelectItem>
                     <SelectItem value="CarbohydrateContent">
-                      Carboidratos
+                      Carbohydrate Content
                     </SelectItem>
                   </SelectContent>
                 </Select>
