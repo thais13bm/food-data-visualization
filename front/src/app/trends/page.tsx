@@ -17,6 +17,10 @@ const BarChart = dynamic(() => import("@/components/charts/barchart"), {
   ssr: false,
 });
 
+const ScatterPlot = dynamic(() => import("@/components/charts/scatterplot"), {
+  ssr: false,
+});
+
 interface Recipe {
   RecipeCategory: string;
 }
@@ -36,6 +40,7 @@ export default function TrendsPage() {
   const [open, setOpen] = useState(false);
   const [topN, setTopN] = useState(10);
   const [xField, setXField] = useState("Calories");
+  const [yField, setYField] = useState("ProteinContent");
 
   if (isLoading) return <p>Carregando...</p>;
   if (error) return <p>Erro ao carregar dados</p>;
@@ -99,9 +104,7 @@ export default function TrendsPage() {
           <Card className="h-full">
             <CardContent className="h-full flex items-start justify-center">
               <div className="w-full max-w-[200px]">
-                <label className="text-base font-semibold">
-                  Campo no eixo X
-                </label>
+                <label className="text-base font-semibold">X Field</label>
                 <Select value={xField} onValueChange={setXField}>
                   <SelectTrigger className="w-full h-9 text-sm">
                     <SelectValue placeholder="Escolha o campo" />
@@ -120,9 +123,30 @@ export default function TrendsPage() {
           </Card>
 
           <Card className="h-full">
-            <CardContent className="h-full flex flex-col items-center justify-center">
+            <CardContent className="h-full flex items-start justify-center">
+              <div className="w-full max-w-[200px]">
+                <label className="text-base font-semibold">Y Field</label>
+                <Select value={yField} onValueChange={setYField}>
+                  <SelectTrigger className="w-full h-9 text-sm">
+                    <SelectValue placeholder="Escolha o campo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Calories">Calorias</SelectItem>
+                    <SelectItem value="FatContent">Gordura</SelectItem>
+                    <SelectItem value="ProteinContent">Proteína</SelectItem>
+                    <SelectItem value="CarbohydrateContent">
+                      Carboidratos
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="h-full">
+            <CardContent className="h-full flex flex-col items-center justify-center max">
               <label htmlFor="topN" className="text-base font-semibold">
-                Quantidade de receitas (top N)
+                Quantity
               </label>
               <input
                 id="topN"
@@ -148,6 +172,18 @@ export default function TrendsPage() {
             selectedCategories={selectedCategories.map((c) => c.name)}
             topN={topN}
             xField={xField}
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent>
+          <ScatterPlot
+            data={data}
+            selectedCategories={selectedCategories.map((c) => c.name)}
+            topN={topN}
+            xField={xField}
+            yField={yField}
           />
         </CardContent>
       </Card>
