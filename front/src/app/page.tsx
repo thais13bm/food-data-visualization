@@ -3,6 +3,7 @@
 import ImageCarousel from "@/components/image_slide";
 import useSWR from "swr";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import Link from "next/link";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -52,17 +53,18 @@ export default function Home() {
         })()}
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
-          <CardHeader>
-            <CardTitle className="text-xl font-semibold">
-              General vision
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>Quick summary with basic charts about the recipe dataset.</p>
-          </CardContent>
-        </Card>
-
+        <Link href="/recipes">
+          <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold">
+                General vision
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Quick summary with basic charts about the recipe dataset.</p>
+            </CardContent>
+          </Card>
+        </Link>
         <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
           <CardHeader>
             <CardTitle className="text-xl font-semibold">Ingredients</CardTitle>
