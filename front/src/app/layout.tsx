@@ -26,7 +26,7 @@ export default function RootLayout({
         <TopNav onToggleDrawer={toggleDrawer} />
         <Drawer open={drawerOpen} onClose={closeDrawer} />
         <main
-          className={`pt-16 transition-margin duration-300 ${
+          className={`pt-6 transition-margin duration-300 ${
             drawerOpen ? "ml-64" : "ml-0"
           }`}
           style={{ zIndex: 0, position: "relative" }}

@@ -87,6 +87,14 @@ export default function TrendsPage() {
   return (
     <>
       <div className="px-4 md:px-8 pb-6">
+        <div className="mb-6">
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
+            Analyze individual recipes!
+          </h1>
+          <p className="text-muted-foreground text-base mt-1">
+            Check out images, trends and the champion ones.
+          </p>
+        </div>
         <div className="mb-4">
           <Multiselect
             data={allCategories}
