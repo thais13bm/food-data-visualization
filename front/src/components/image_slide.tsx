@@ -62,13 +62,14 @@ export default function ImageCarousel({ recipes }: ImageCarouselProps) {
 
                 {recipe.autor && (
                   <p className="text-sm">
-                    <span className="font-semibold">Autor:</span> {recipe.autor}
+                    <span className="font-semibold">Author:</span>{" "}
+                    {recipe.autor}
                   </p>
                 )}
 
                 {recipe.category && (
                   <p className="text-sm mb-1">
-                    <span className="font-semibold">Categoria:</span>{" "}
+                    <span className="font-semibold">Category:</span>{" "}
                     {recipe.category}
                   </p>
                 )}

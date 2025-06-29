@@ -48,7 +48,27 @@ export default function BarChart({ data, selectedCategories, topN, xField }) {
 
     const top = [...filtered]
       .sort((a, b) => b[xField] - a[xField])
-      .slice(0, topN);
+      .slice(0, topN)
+      .map((d) => {
+        let imageUrl = "";
+
+        // Temporário - depois a gente pode ajustar para uma imagem por receita no csv, pra evitar esse replace
+        try {
+          const parsed = JSON.parse(d.Images.replace(/'/g, '"'));
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            imageUrl = parsed[0];
+          } else if (typeof parsed === "string") {
+            imageUrl = parsed;
+          }
+        } catch (err) {
+          imageUrl = d.Images.replace(/['"]/g, "");
+        }
+
+        return {
+          ...d,
+          image: imageUrl,
+        };
+      });
 
     const spec = vl
       .markBar()
@@ -67,6 +87,7 @@ export default function BarChart({ data, selectedCategories, topN, xField }) {
             title: "Published",
             format: "%d/%m/%Y",
           },
+          { field: "image" },
         ])
       )
       .width(containerWidth)
