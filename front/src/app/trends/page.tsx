@@ -129,13 +129,43 @@ export default function TrendsPage() {
                     <SelectValue placeholder="Choose the field" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="AggregatedRating">
+                      Aggregated Rating
+                    </SelectItem>
+                    <SelectItem value="ReviewCount">Review Count</SelectItem>
                     <SelectItem value="Calories">Calories</SelectItem>
                     <SelectItem value="FatContent">Fat Content</SelectItem>
-                    <SelectItem value="ProteinContent">
-                      Protein Content
+                    <SelectItem value="SaturatedFatContent">
+                      Saturated Fat Content
+                    </SelectItem>
+                    <SelectItem value="CholesterolContent">
+                      Cholesterol Content
+                    </SelectItem>
+                    <SelectItem value="SodiumContent">
+                      Sodium Content
                     </SelectItem>
                     <SelectItem value="CarbohydrateContent">
                       Carbohydrate Content
+                    </SelectItem>
+                    <SelectItem value="FiberContent">Fiber Content</SelectItem>
+                    <SelectItem value="SugarContent">Sugar Content</SelectItem>
+                    <SelectItem value="ProteinContent">
+                      Protein Content
+                    </SelectItem>
+                    <SelectItem value="RecipeServings">
+                      Recipe Servings
+                    </SelectItem>
+                    <SelectItem value="NumIngredients">
+                      Number of Ingredients
+                    </SelectItem>
+                    <SelectItem value="CookTime_hours">
+                      Cook Time (hours)
+                    </SelectItem>
+                    <SelectItem value="PrepTime_hours">
+                      Prep Time (hours)
+                    </SelectItem>
+                    <SelectItem value="TotalTime_hours">
+                      Total Time (hours)
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -185,13 +215,43 @@ export default function TrendsPage() {
                     <SelectValue placeholder="Choose the field" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="AggregatedRating">
+                      Aggregated Rating
+                    </SelectItem>
+                    <SelectItem value="ReviewCount">Review Count</SelectItem>
                     <SelectItem value="Calories">Calories</SelectItem>
                     <SelectItem value="FatContent">Fat Content</SelectItem>
-                    <SelectItem value="ProteinContent">
-                      Protein Content
+                    <SelectItem value="SaturatedFatContent">
+                      Saturated Fat Content
+                    </SelectItem>
+                    <SelectItem value="CholesterolContent">
+                      Cholesterol Content
+                    </SelectItem>
+                    <SelectItem value="SodiumContent">
+                      Sodium Content
                     </SelectItem>
                     <SelectItem value="CarbohydrateContent">
                       Carbohydrate Content
+                    </SelectItem>
+                    <SelectItem value="FiberContent">Fiber Content</SelectItem>
+                    <SelectItem value="SugarContent">Sugar Content</SelectItem>
+                    <SelectItem value="ProteinContent">
+                      Protein Content
+                    </SelectItem>
+                    <SelectItem value="RecipeServings">
+                      Recipe Servings
+                    </SelectItem>
+                    <SelectItem value="NumIngredients">
+                      Number of Ingredients
+                    </SelectItem>
+                    <SelectItem value="CookTime_hours">
+                      Cook Time (hours)
+                    </SelectItem>
+                    <SelectItem value="PrepTime_hours">
+                      Prep Time (hours)
+                    </SelectItem>
+                    <SelectItem value="TotalTime_hours">
+                      Total Time (hours)
                     </SelectItem>
                   </SelectContent>
                 </Select>
