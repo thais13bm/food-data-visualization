@@ -92,6 +92,7 @@ export default function BarChart({
         vl.color().fieldN("RecipeCategory").title("Category"),
         vl.tooltip([
           { field: "Name", title: "Recipe" },
+          { field: "RecipeCategory", title: "Category" },
           { field: "AuthorName", title: "Author" },
           { field: xField, title: xField },
           {

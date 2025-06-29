@@ -89,6 +89,7 @@ export default function ScatterPlot({
         }),
         vl.tooltip([
           { field: "Name", title: "Recipe" },
+          { field: "RecipeCategory", title: "Category" },
           { field: "AuthorName", title: "Author" },
           { field: xField, title: xField },
           { field: yField, title: yField },
