@@ -4,7 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import * as vl from "vega-lite-api";
 import embed from "vega-embed";
 
-export default function BarChart({ data, selectedCategories, topN, xField }) {
+export default function BarChart({
+  data,
+  selectedCategories,
+  topN,
+  xField,
+  ascending = false,
+}) {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -47,7 +53,9 @@ export default function BarChart({ data, selectedCategories, topN, xField }) {
       .filter((d) => activeCategories.includes(d.RecipeCategory));
 
     const top = [...filtered]
-      .sort((a, b) => b[xField] - a[xField])
+      .sort((a, b) =>
+        ascending ? a[xField] - b[xField] : b[xField] - a[xField]
+      )
       .slice(0, topN)
       .map((d) => {
         let imageUrl = "";
@@ -75,8 +83,13 @@ export default function BarChart({ data, selectedCategories, topN, xField }) {
       .data(top)
       .encode(
         vl.x().fieldQ(xField).title(xField),
-        vl.y().fieldN("Name").sort("-x").title("Receita"),
-        vl.color().fieldN("RecipeCategory").title("Categoria"),
+        vl
+          .y()
+          .fieldN("Name")
+          .sort(ascending ? "x" : "-x")
+          .title("Recipe"),
+
+        vl.color().fieldN("RecipeCategory").title("Category"),
         vl.tooltip([
           { field: "Name", title: "Recipe" },
           { field: "AuthorName", title: "Author" },

@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 
 const BarChart = dynamic(() => import("@/components/charts/barchart"), {
   ssr: false,
@@ -42,6 +43,7 @@ export default function TrendsPage() {
   const [xFieldBarChart, setXFieldBarChart] = useState("Calories");
   const [xFieldScatterPlot, setXFieldScatterPlot] = useState("Calories");
   const [yField, setYField] = useState("ProteinContent");
+  const [ascending, setAscending] = useState(false);
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading data</p>;
@@ -186,6 +188,25 @@ export default function TrendsPage() {
                   className="border rounded p-2 w-full h-9 text-center"
                 />
               </div>
+
+              <div className="w-full max-w-[200px] pt-6">
+                {/* <label className="text-base font-semibold">Order</label> */}
+                <button
+                  onClick={() => setAscending((prev) => !prev)}
+                  className="w-9 h-9 border rounded flex items-center justify-center transition-colors hover:bg-muted"
+                  title={
+                    ascending
+                      ? "Sort ascending (smallest on top)"
+                      : "Sort descending (largest on top)"
+                  }
+                >
+                  {ascending ? (
+                    <ArrowDownIcon className="w-5 h-5" />
+                  ) : (
+                    <ArrowUpIcon className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
             </div>
 
             <CardContent className="w-full min-w-0 overflow-hidden">
@@ -194,6 +215,7 @@ export default function TrendsPage() {
                 selectedCategories={selectedCategories.map((c) => c.name)}
                 topN={topN}
                 xField={xFieldBarChart}
+                ascending={ascending}
               />
             </CardContent>
           </Card>
