@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as vl from "vega-lite-api";
 import embed from "vega-embed";
 
@@ -10,15 +10,41 @@ export default function ScatterPlot({
   xField,
   yField,
 }) {
+  const containerRef = useRef(null);
   const chartRef = useRef(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  const margin = { left: 20, right: 20 };
+  const height = 350;
 
   useEffect(() => {
-    if (!chartRef.current) return;
+    const resize = () => {
+      if (containerRef.current) {
+        const width =
+          containerRef.current.getBoundingClientRect().width -
+          margin.left -
+          margin.right -
+          120; // legenda
+        setContainerWidth(width);
+      }
+    };
+
+    resize();
+
+    const observer = new ResizeObserver(resize);
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!chartRef.current || containerWidth === 0) return;
 
     const allCategories = [
       ...new Set(data.map((d) => d.RecipeCategory)),
     ].sort();
-
     const activeCategories = selectedCategories.includes("All")
       ? allCategories
       : selectedCategories;
@@ -45,14 +71,28 @@ export default function ScatterPlot({
           { field: "AuthorName", title: "Author" },
           { field: xField, title: xField },
           { field: yField, title: yField },
+          {
+            field: "DatePublished",
+            type: "temporal",
+            title: "Published",
+            format: "%d/%m/%Y",
+          },
         ])
       )
-      .width(600)
-      .height(400)
+      .width(containerWidth)
+      .height(height)
       .toSpec();
 
-    embed(chartRef.current, spec, { actions: false });
-  }, [data, selectedCategories, xField, yField]);
+    embed(chartRef.current, spec, {
+      actions: false,
+      renderer: "svg",
+      defaultStyle: true,
+    });
+  }, [data, selectedCategories, xField, yField, containerWidth]);
 
-  return <div ref={chartRef} />;
+  return (
+    <div ref={containerRef} className="w-full h-[400px]">
+      <div ref={chartRef} className="w-full h-full" />
+    </div>
+  );
 }

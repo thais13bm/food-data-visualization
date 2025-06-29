@@ -1,46 +1,43 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as vl from "vega-lite-api";
 import embed from "vega-embed";
 
 export default function BarChart({ data, selectedCategories, topN, xField }) {
+  const containerRef = useRef(null);
   const chartRef = useRef(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  const margin = { left: 20, right: 20 };
+  const height = topN * 35;
 
   useEffect(() => {
-    if (!chartRef.current) return;
-
-    const unitsMap = {
-      Calories: "kcal",
-      FatContent: "g",
-      SugarContent: "g",
-      SodiumContent: "mg",
-      ProteinContent: "g",
-      CholesterolContent: "mg",
-      CarbohydrateContent: "g",
-      FiberContent: "g",
-      // adicione outros campos conforme necessário
+    const resize = () => {
+      if (containerRef.current) {
+        const width =
+          containerRef.current.getBoundingClientRect().width -
+          margin.left -
+          margin.right -
+          250;
+        setContainerWidth(width);
+      }
     };
 
+    resize();
 
-    function renameFieldWithUnit(data, xField, unitsMap) {
-      const unit = unitsMap[xField];
-      const newFieldName = unit ? `${xField} (${unit})` : xField;
+    const observer = new ResizeObserver(resize);
+    if (containerRef.current) observer.observe(containerRef.current);
 
-      const newData = data.map((item) => ({
-        ...item,
-        [newFieldName]: item[xField],
-      }));
+    return () => observer.disconnect();
+  }, []);
 
-      return { data: newData, fieldName: newFieldName };
-    }
-
-
+  useEffect(() => {
+    if (!chartRef.current || containerWidth === 0) return;
 
     const allCategories = [
       ...new Set(data.map((d) => d.RecipeCategory)),
     ].sort();
-
     const activeCategories = selectedCategories.includes("All")
       ? allCategories
       : selectedCategories;
@@ -53,31 +50,39 @@ export default function BarChart({ data, selectedCategories, topN, xField }) {
       .sort((a, b) => b[xField] - a[xField])
       .slice(0, topN);
 
-    //const {renamedData, xField } = renameFieldWithUnit(top, xField, unitsMap);
-
-    const { data: preparedData, fieldName: xFieldLabel } = renameFieldWithUnit(top, xField, unitsMap);
-
-
     const spec = vl
       .markBar()
-      .data(preparedData)
+      .data(top)
       .encode(
-        vl.x().fieldQ(xFieldLabel).title(xFieldLabel),
-        vl.y().fieldN("Name").sort("-x").title("Recipe"),
-        vl.color().fieldN("RecipeCategory").title("Category"),
+        vl.x().fieldQ(xField).title(xField),
+        vl.y().fieldN("Name").sort("-x").title("Receita"),
+        vl.color().fieldN("RecipeCategory").title("Categoria"),
         vl.tooltip([
+          { field: "Name", title: "Recipe" },
           { field: "AuthorName", title: "Author" },
-          { field: "Description", title: "Description" },
-          { field: xFieldLabel, title: xFieldLabel },
-          { field: "RecipeId", title: "RecipeId" },
+          { field: xField, title: xField },
+          {
+            field: "DatePublished",
+            type: "temporal",
+            title: "Published",
+            format: "%d/%m/%Y",
+          },
         ])
       )
-      .width(600)
-      .height(40 * top.length)
+      .width(containerWidth)
+      .height(height)
       .toSpec();
 
-    embed(chartRef.current, spec, { actions: false });
-  }, [data, selectedCategories, topN, xField]);
+    embed(chartRef.current, spec, {
+      actions: false,
+      renderer: "svg",
+      defaultStyle: true,
+    });
+  }, [data, selectedCategories, topN, xField, containerWidth]);
 
-  return <div ref={chartRef} />;
+  return (
+    <div ref={containerRef} className="w-full" style={{ height }}>
+      <div ref={chartRef} className="w-full h-full" />
+    </div>
+  );
 }
