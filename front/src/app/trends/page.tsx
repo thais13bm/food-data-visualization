@@ -1,12 +1,18 @@
 "use client";
 
 import useSWR from "swr";
+import dynamic from "next/dynamic";
 
 interface Recipe {
   RecipeCategory: string;
+  DatePublished: string;
+  // ...outros campos se necessário
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+// Importa dinamicamente o LineChart para evitar problemas de SSR
+const LineChart = dynamic(() => import("../../components/charts/LineChart"), { ssr: false });
 
 export default function TrendsPage() {
   const {
@@ -28,6 +34,10 @@ export default function TrendsPage() {
           <p className="text-muted-foreground text-base mt-1">
             Recipes aggregated per category, and other insights!
           </p>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <h2 className="text-lg font-semibold mb-2">Recipes per Year</h2>
+          <LineChart data={data} />
         </div>
       </div>
     </>

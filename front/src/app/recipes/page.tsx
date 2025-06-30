@@ -282,18 +282,51 @@ export default function RecipesPage() {
               {/* Campo Y Field */}
               <div className="w-full max-w-[200px]">
                 <label className="text-base font-semibold">Y Field</label>
-                <Select value={yField} onValueChange={setYField}>
+                <Select
+                  value={yField}
+                  onValueChange={setYField}
+                >
                   <SelectTrigger className="w-full h-9 text-sm">
                     <SelectValue placeholder="Choose the field" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="AggregatedRating">
+                      Aggregated Rating
+                    </SelectItem>
+                    <SelectItem value="ReviewCount">Review Count</SelectItem>
                     <SelectItem value="Calories (kcal)">Calories (kcal)</SelectItem>
                     <SelectItem value="FatContent (g)">Fat Content</SelectItem>
-                    <SelectItem value="ProteinContent (g)">
-                      Protein Content
+                    <SelectItem value="SaturatedFatContent (g)">
+                      Saturated Fat Content
+                    </SelectItem>
+                    <SelectItem value="CholesterolContent (mg)">
+                      Cholesterol Content
+                    </SelectItem>
+                    <SelectItem value="SodiumContent (mg)">
+                      Sodium Content
                     </SelectItem>
                     <SelectItem value="CarbohydrateContent (g)">
                       Carbohydrate Content
+                    </SelectItem>
+                    <SelectItem value="FiberContent (g)">Fiber Content</SelectItem>
+                    <SelectItem value="SugarContent (g)">Sugar Content</SelectItem>
+                    <SelectItem value="ProteinContent (g)">
+                      Protein Content
+                    </SelectItem>
+                    <SelectItem value="RecipeServings">
+                      Recipe Servings
+                    </SelectItem>
+                    <SelectItem value="NumIngredients">
+                      Number of Ingredients
+                    </SelectItem>
+                    <SelectItem value="CookTime_hours">
+                      Cook Time (hours)
+                    </SelectItem>
+                    <SelectItem value="PrepTime_hours">
+                      Prep Time (hours)
+                    </SelectItem>
+                    <SelectItem value="TotalTime_hours">
+                      Total Time (hours)
                     </SelectItem>
                   </SelectContent>
                 </Select>
