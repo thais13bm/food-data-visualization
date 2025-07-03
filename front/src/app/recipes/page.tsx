@@ -20,6 +20,12 @@ const BarChart = dynamic(() => import("@/components/charts/barchart"), {
 const ScatterPlot = dynamic(() => import("@/components/charts/scatterplot"), {
   ssr: false,
 });
+const WordCloudChart = dynamic(() => import("@/components/charts/wordcloud"), {
+  ssr: false,
+});
+
+
+
 
 interface Recipe {
   RecipeCategory: string;
@@ -219,6 +225,21 @@ export default function RecipesPage() {
               />
             </CardContent>
           </Card>
+
+          {/* Word Cloud */}
+          <Card>
+            <CardHeader className="text-center">
+              <CardTitle>Word Cloud (Ingredients)</CardTitle>
+            </CardHeader>
+            <CardContent className="w-full min-w-0 overflow-hidden">
+              <WordCloudChart
+                data={data}
+                selectedCategories={selectedCategories.map((c) => c.name)}
+              />
+            </CardContent>
+          </Card>        
+
+
 
           {/* Scatter Plot */}
           <Card>
