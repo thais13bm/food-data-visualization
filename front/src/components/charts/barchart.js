@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as vl from "vega-lite-api";
 import embed from "vega-embed";
+import { LoadingOverlay } from "@/components/common/loading-overlay";
 
 export default function BarChart({
   data,
@@ -14,18 +15,13 @@ export default function BarChart({
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
-
-  const margin = { left: 20, right: 20 };
   const height = topN * 35;
+  const [chartLoading, setChartLoading] = useState(true);
 
   useEffect(() => {
     const resize = () => {
       if (containerRef.current) {
-        const width =
-          containerRef.current.getBoundingClientRect().width -
-          margin.left -
-          margin.right -
-          250;
+        const width = containerRef.current.getBoundingClientRect().width;
         setContainerWidth(width);
       }
     };
@@ -40,6 +36,7 @@ export default function BarChart({
 
   useEffect(() => {
     if (!chartRef.current || containerWidth === 0) return;
+    setChartLoading(true);
 
     const allCategories = [
       ...new Set(data.map((d) => d.RecipeCategory)),
@@ -106,20 +103,29 @@ export default function BarChart({
       )
       .width(containerWidth)
       .height(height)
+      .autosize({ type: "fit", contains: "padding" })
+      .config({
+        padding: { left: 20, right: 10, bottom: 10, top: 10 },
+      })
       .toSpec();
 
     embed(chartRef.current, spec, {
       actions: false,
       renderer: "svg",
       defaultStyle: true,
+    }).then(() => {
+      setChartLoading(false);
     });
   }, [data, selectedCategories, topN, xField, containerWidth]);
 
   return (
-    <div ref={containerRef} className="w-full" style={{ height }}>
+    <div ref={containerRef} className="w-full relative" style={{ height }}>
+      {chartLoading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
+          <LoadingOverlay variant="neutral" />
+        </div>
+      )}
       <div ref={chartRef} className="w-full h-full" />
     </div>
   );
 }
-
-

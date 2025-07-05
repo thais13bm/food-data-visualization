@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as vl from "vega-lite-api";
 import embed from "vega-embed";
+import { LoadingOverlay } from "@/components/common/loading-overlay";
 
 export default function ScatterPlot({
   data,
@@ -13,11 +14,13 @@ export default function ScatterPlot({
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [chartLoading, setChartLoading] = useState(true);
 
   const margin = { left: 20, right: 20 };
   const height = 350;
 
   useEffect(() => {
+    console.log("ScatterPlot - primeiro loading");
     const resize = () => {
       if (containerRef.current) {
         const width =
@@ -40,7 +43,10 @@ export default function ScatterPlot({
   }, []);
 
   useEffect(() => {
+    console.log("ScatterPlot - atualizando gráfico");
     if (!chartRef.current || containerWidth === 0) return;
+    setChartLoading(true);
+    console.log("ScatterPlot - carregando gráfico");
 
     const allCategories = [
       ...new Set(data.map((d) => d.RecipeCategory)),
@@ -58,8 +64,6 @@ export default function ScatterPlot({
       .sort((a, b) => b[xField] - a[xField])
       .map((d) => {
         let imageUrl = "";
-
-        // Temporário - depois a gente pode ajustar para uma imagem por receita no csv, pra evitar esse replace
         try {
           const parsed = JSON.parse(d.Images.replace(/'/g, '"'));
           if (Array.isArray(parsed) && parsed.length > 0) {
@@ -110,11 +114,19 @@ export default function ScatterPlot({
       actions: false,
       renderer: "svg",
       defaultStyle: true,
+    }).then(() => {
+      setChartLoading(false);
     });
+    console.log("ScatterPlot - gráfico carregado");
   }, [data, selectedCategories, xField, yField, containerWidth]);
 
   return (
-    <div ref={containerRef} className="w-full h-[400px]">
+    <div ref={containerRef} className="w-full h-[400px] relative">
+      {chartLoading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
+          <LoadingOverlay variant="neutral" />
+        </div>
+      )}
       <div ref={chartRef} className="w-full h-full" />
     </div>
   );

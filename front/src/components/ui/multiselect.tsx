@@ -48,7 +48,7 @@ export function Multiselect<T>({
   filterPlaceholder,
 }: IMultiselect<T>) {
   return (
-    <div className="w-[300px]">
+    <div className="min-w-[300px]">
       <Popover open={open} onOpenChange={onOpenChange} modal={modal}>
         <PopoverTrigger asChild>
           <div>

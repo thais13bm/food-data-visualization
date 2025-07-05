@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
+import { LoadingOverlay } from "@/components/common/loading-overlay";
 
 const BarChart = dynamic(() => import("@/components/charts/barchart"), {
   ssr: false,
@@ -23,9 +24,6 @@ const ScatterPlot = dynamic(() => import("@/components/charts/scatterplot"), {
 const WordCloudChart = dynamic(() => import("@/components/charts/wordcloud"), {
   ssr: false,
 });
-
-
-
 
 interface Recipe {
   RecipeCategory: string;
@@ -50,9 +48,6 @@ export default function RecipesPage() {
   const [xFieldScatterPlot, setXFieldScatterPlot] = useState("Calories (kcal)");
   const [yField, setYField] = useState("ProteinContent (g)");
   const [ascending, setAscending] = useState(false);
-
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading data</p>;
 
   const rawCategories = Array.from(
     new Set(data.map((d: any) => d.RecipeCategory).filter(Boolean))
@@ -92,6 +87,15 @@ export default function RecipesPage() {
     );
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <LoadingOverlay variant="neutral" fullscreen={false} />
+      </div>
+    );
+  }
+
+  if (error) return <p>Error loading data</p>;
   return (
     <>
       <div className="px-4 md:px-8 pb-6">
@@ -103,7 +107,7 @@ export default function RecipesPage() {
             Check out images, trends and the champion ones.
           </p>
         </div>
-        <div className="mb-4">
+        <div className="inline-block min-w-[300px] max-w-[600px] mb-4">
           <Multiselect
             data={allCategories}
             open={open}
@@ -141,7 +145,9 @@ export default function RecipesPage() {
                       Aggregated Rating
                     </SelectItem>
                     <SelectItem value="ReviewCount">Review Count</SelectItem>
-                    <SelectItem value="Calories (kcal)">Calories (kcal)</SelectItem>
+                    <SelectItem value="Calories (kcal)">
+                      Calories (kcal)
+                    </SelectItem>
                     <SelectItem value="FatContent (g)">Fat Content</SelectItem>
                     <SelectItem value="SaturatedFatContent (g)">
                       Saturated Fat Content
@@ -155,8 +161,12 @@ export default function RecipesPage() {
                     <SelectItem value="CarbohydrateContent (g)">
                       Carbohydrate Content
                     </SelectItem>
-                    <SelectItem value="FiberContent (g)">Fiber Content</SelectItem>
-                    <SelectItem value="SugarContent (g)">Sugar Content</SelectItem>
+                    <SelectItem value="FiberContent (g)">
+                      Fiber Content
+                    </SelectItem>
+                    <SelectItem value="SugarContent (g)">
+                      Sugar Content
+                    </SelectItem>
                     <SelectItem value="ProteinContent (g)">
                       Protein Content
                     </SelectItem>
@@ -215,7 +225,7 @@ export default function RecipesPage() {
               </div>
             </div>
 
-            <CardContent className="w-full min-w-0 overflow-hidden">
+            <CardContent className="w-full min-w-0 min-h-[300px] relative overflow-hidden">
               <BarChart
                 data={data}
                 selectedCategories={selectedCategories.map((c) => c.name)}
@@ -237,9 +247,7 @@ export default function RecipesPage() {
                 selectedCategories={selectedCategories.map((c) => c.name)}
               />
             </CardContent>
-          </Card>        
-
-
+          </Card>
 
           {/* Scatter Plot */}
           <Card>
@@ -262,7 +270,9 @@ export default function RecipesPage() {
                       Aggregated Rating
                     </SelectItem>
                     <SelectItem value="ReviewCount">Review Count</SelectItem>
-                    <SelectItem value="Calories (kcal)">Calories (kcal)</SelectItem>
+                    <SelectItem value="Calories (kcal)">
+                      Calories (kcal)
+                    </SelectItem>
                     <SelectItem value="FatContent (g)">Fat Content</SelectItem>
                     <SelectItem value="SaturatedFatContent (g)">
                       Saturated Fat Content
@@ -276,8 +286,12 @@ export default function RecipesPage() {
                     <SelectItem value="CarbohydrateContent (g)">
                       Carbohydrate Content
                     </SelectItem>
-                    <SelectItem value="FiberContent (g)">Fiber Content</SelectItem>
-                    <SelectItem value="SugarContent (g)">Sugar Content</SelectItem>
+                    <SelectItem value="FiberContent (g)">
+                      Fiber Content
+                    </SelectItem>
+                    <SelectItem value="SugarContent (g)">
+                      Sugar Content
+                    </SelectItem>
                     <SelectItem value="ProteinContent (g)">
                       Protein Content
                     </SelectItem>
@@ -303,10 +317,7 @@ export default function RecipesPage() {
               {/* Campo Y Field */}
               <div className="w-full max-w-[200px]">
                 <label className="text-base font-semibold">Y Field</label>
-                <Select
-                  value={yField}
-                  onValueChange={setYField}
-                >
+                <Select value={yField} onValueChange={setYField}>
                   <SelectTrigger className="w-full h-9 text-sm">
                     <SelectValue placeholder="Choose the field" />
                   </SelectTrigger>
@@ -315,7 +326,9 @@ export default function RecipesPage() {
                       Aggregated Rating
                     </SelectItem>
                     <SelectItem value="ReviewCount">Review Count</SelectItem>
-                    <SelectItem value="Calories (kcal)">Calories (kcal)</SelectItem>
+                    <SelectItem value="Calories (kcal)">
+                      Calories (kcal)
+                    </SelectItem>
                     <SelectItem value="FatContent (g)">Fat Content</SelectItem>
                     <SelectItem value="SaturatedFatContent (g)">
                       Saturated Fat Content
@@ -329,8 +342,12 @@ export default function RecipesPage() {
                     <SelectItem value="CarbohydrateContent (g)">
                       Carbohydrate Content
                     </SelectItem>
-                    <SelectItem value="FiberContent (g)">Fiber Content</SelectItem>
-                    <SelectItem value="SugarContent (g)">Sugar Content</SelectItem>
+                    <SelectItem value="FiberContent (g)">
+                      Fiber Content
+                    </SelectItem>
+                    <SelectItem value="SugarContent (g)">
+                      Sugar Content
+                    </SelectItem>
                     <SelectItem value="ProteinContent (g)">
                       Protein Content
                     </SelectItem>
