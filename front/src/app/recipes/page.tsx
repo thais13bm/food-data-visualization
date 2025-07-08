@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 import { LoadingOverlay } from "@/components/common/loading-overlay";
+import { categoryToCountryMap } from "@/utils/category_to_country_map";
 
 const BarChart = dynamic(() => import("@/components/charts/barchart"), {
   ssr: false,
@@ -24,6 +25,13 @@ const ScatterPlot = dynamic(() => import("@/components/charts/scatterplot"), {
 const WordCloudChart = dynamic(() => import("@/components/charts/wordcloud"), {
   ssr: false,
 });
+
+const WorldMapFilter = dynamic(
+  () => import("@/components/charts/world_map_filter"),
+  {
+    ssr: false,
+  }
+);
 
 interface Recipe {
   RecipeCategory: string;
@@ -48,6 +56,16 @@ export default function RecipesPage() {
   const [xFieldScatterPlot, setXFieldScatterPlot] = useState("Calories (kcal)");
   const [yField, setYField] = useState("ProteinContent (g)");
   const [ascending, setAscending] = useState(false);
+  const [filterMode, setFilterMode] = useState("multiselect");
+
+  const countriesWithRecipes = Array.from(
+    new Set(
+      data
+        .map((d) => d.RecipeCategory)
+        .filter((cat) => categoryToCountryMap[cat])
+        .map((cat) => categoryToCountryMap[cat])
+    )
+  );
 
   const rawCategories = Array.from(
     new Set(data.map((d: any) => d.RecipeCategory).filter(Boolean))
@@ -95,6 +113,13 @@ export default function RecipesPage() {
     );
   }
 
+  // console.log(
+  //   "Categorias distintas:",
+  //   Array.from(new Set(data.map((d) => d.RecipeCategory)))
+  // );
+
+  // console.log("Mapeamento categoryToCountryMap:", categoryToCountryMap);
+
   if (error) return <p>Error loading data</p>;
   return (
     <>
@@ -107,22 +132,55 @@ export default function RecipesPage() {
             Check out images, trends and the champion ones.
           </p>
         </div>
-        <div className="inline-block min-w-[300px] max-w-[600px] mb-4">
-          <Multiselect
-            data={allCategories}
-            open={open}
-            onOpenChange={setOpen}
-            modal={false}
-            optionKey="name"
-            optionValue="name"
-            optionLabel="name"
-            selectedOptions={selectedCategories}
-            onSelect={handleSelect}
-            onRemove={handleRemove}
-            buttonPlaceholder="Select categories"
-            filterPlaceholder="Filter categories..."
-          />
+        <div className="mb-4 w-full max-w-[300px]">
+          <label className="text-base font-semibold block mb-1">
+            Filter mode
+          </label>
+          <Select value={filterMode} onValueChange={setFilterMode}>
+            <SelectTrigger className="w-full h-9 text-sm">
+              <SelectValue placeholder="Select filter mode" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="multiselect">Multiselect</SelectItem>
+              <SelectItem value="map">World Map</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
+
+        {filterMode === "multiselect" ? (
+          <div className="inline-block min-w-[300px] max-w-[600px] mb-4">
+            <Multiselect
+              data={allCategories}
+              open={open}
+              onOpenChange={setOpen}
+              modal={false}
+              optionKey="name"
+              optionValue="name"
+              optionLabel="name"
+              selectedOptions={selectedCategories}
+              onSelect={handleSelect}
+              onRemove={handleRemove}
+              buttonPlaceholder="Select categories"
+              filterPlaceholder="Filter categories..."
+            />
+          </div>
+        ) : (
+          <div className="border rounded p-2 mb-4">
+            <WorldMapFilter
+              countriesWithRecipes={countriesWithRecipes}
+              onCountrySelect={(country) => {
+                const countryToCategoryMap = Object.fromEntries(
+                  Object.entries(categoryToCountryMap).map(([k, v]) => [v, k])
+                );
+                const category = countryToCategoryMap[country];
+                if (category) {
+                  setSelectedCategories([{ name: category }]);
+                  setFilterMode("multiselect");
+                }
+              }}
+            />
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Bar Chart */}
           <Card>

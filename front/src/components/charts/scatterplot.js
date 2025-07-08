@@ -43,10 +43,8 @@ export default function ScatterPlot({
   }, []);
 
   useEffect(() => {
-    console.log("ScatterPlot - atualizando gráfico");
     if (!chartRef.current || containerWidth === 0) return;
     setChartLoading(true);
-    console.log("ScatterPlot - carregando gráfico");
 
     const allCategories = [
       ...new Set(data.map((d) => d.RecipeCategory)),
@@ -117,7 +115,6 @@ export default function ScatterPlot({
     }).then(() => {
       setChartLoading(false);
     });
-    console.log("ScatterPlot - gráfico carregado");
   }, [data, selectedCategories, xField, yField, containerWidth]);
 
   return (
