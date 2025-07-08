@@ -26,6 +26,10 @@ const WordCloudChart = dynamic(() => import("@/components/charts/wordcloud"), {
   ssr: false,
 });
 
+const ParallelCoordinatesChart = dynamic(() => import("@/components/charts/parallel_coord_plot"), {
+  ssr: false,
+});
+
 const WorldMapFilter = dynamic(
   () => import("@/components/charts/world_map_filter"),
   {
@@ -435,6 +439,17 @@ export default function RecipesPage() {
                 selectedCategories={selectedCategories.map((c) => c.name)}
                 xField={xFieldScatterPlot}
                 yField={yField}
+              />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="text-center">
+              <CardTitle>Parallel coordinates : nutrients</CardTitle>
+            </CardHeader>
+            <CardContent >
+              <ParallelCoordinatesChart
+                data={data}
+                selectedCategories={selectedCategories.map((c) => c.name)}
               />
             </CardContent>
           </Card>
