@@ -6,6 +6,7 @@ import { countryIdToName } from "@/utils/iso_to_country";
 
 export default function WorldMapFilter({
   countriesWithRecipes,
+  selectedCountryId,
   onCountrySelect,
 }) {
   const ref = useRef(null);
@@ -55,6 +56,13 @@ export default function WorldMapFilter({
             fields: ["name"],
           },
         },
+        {
+          calculate:
+            selectedCountryId !== null
+              ? `datum.id === ${selectedCountryId}`
+              : "false",
+          as: "isSelected",
+        },
       ],
       projection: { type: "equirectangular" },
       selection: {
@@ -68,11 +76,18 @@ export default function WorldMapFilter({
       mark: "geoshape",
       encoding: {
         color: {
+          condition: [
+            {
+              test: "datum.hasRecipe && datum.isSelected",
+              value: "#ef4444",
+            },
+          ],
           field: "hasRecipe",
           type: "nominal",
           scale: { domain: [true, null], range: ["#10b981", "#e5e7eb"] },
           legend: null,
         },
+
         tooltip: { field: "name", type: "nominal" },
         stroke: {
           condition: { selection: "selectedCountry", value: "black" },

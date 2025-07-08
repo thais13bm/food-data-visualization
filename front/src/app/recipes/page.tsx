@@ -65,6 +65,9 @@ export default function RecipesPage() {
   const [yField, setYField] = useState("ProteinContent (g)");
   const [ascending, setAscending] = useState(false);
   const [filterMode, setFilterMode] = useState("multiselect");
+  const [selectedCountryId, setSelectedCountryId] = useState<number | null>(
+    null
+  );
 
   const countriesWithRecipes = Array.from(
     new Set(
@@ -178,17 +181,16 @@ export default function RecipesPage() {
           <div className="border rounded p-2 mb-4">
             <WorldMapFilter
               countriesWithRecipes={countriesWithRecipes}
+              selectedCountryId={selectedCountryId}
               onCountrySelect={(country) => {
-                console.log("Country clicked:", country);
                 const countryToCategoryMap = Object.fromEntries(
                   Object.entries(categoryToCountryMap).map(([k, v]) => [v, k])
                 );
                 const category = countryToCategoryMap[country];
-                console.log("Selected country:", country);
-                console.log("Category for selected country:", category);
+                const countryId = countryNameToId[country]; 
                 if (category) {
                   setSelectedCategories([{ name: category }]);
-                  console.log("Selected category from map:", category);
+                  setSelectedCountryId(countryId); 
                 }
               }}
             />
