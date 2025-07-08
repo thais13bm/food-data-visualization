@@ -65,9 +65,7 @@ export default function RecipesPage() {
   const [yField, setYField] = useState("ProteinContent (g)");
   const [ascending, setAscending] = useState(false);
   const [filterMode, setFilterMode] = useState("multiselect");
-  const [selectedCountryId, setSelectedCountryId] = useState<number | null>(
-    null
-  );
+  const [selectedCountryIds, setSelectedCountryIds] = useState<number[]>([]);
 
   const countriesWithRecipes = Array.from(
     new Set(
@@ -181,17 +179,31 @@ export default function RecipesPage() {
           <div className="border rounded p-2 mb-4">
             <WorldMapFilter
               countriesWithRecipes={countriesWithRecipes}
-              selectedCountryId={selectedCountryId}
-              onCountrySelect={(country) => {
-                const countryToCategoryMap = Object.fromEntries(
-                  Object.entries(categoryToCountryMap).map(([k, v]) => [v, k])
-                );
-                const category = countryToCategoryMap[country];
-                const countryId = countryNameToId[country]; 
-                if (category) {
-                  setSelectedCategories([{ name: category }]);
-                  setSelectedCountryId(countryId); 
-                }
+              selectedCountryIds={selectedCountryIds}
+              onCountryToggle={(countryId) => {
+                setSelectedCountryIds((prevIds) => {
+                  const alreadySelected = prevIds.includes(countryId);
+                  const newIds = alreadySelected
+                    ? prevIds.filter((id) => id !== countryId)
+                    : [...prevIds, countryId];
+
+                  const idToCategory = Object.fromEntries(
+                    Object.entries(categoryToCountryMap).map(([cat, name]) => [
+                      countryNameToId[name],
+                      cat,
+                    ])
+                  );
+
+                  const categories = newIds
+                    .map((id) => idToCategory[id])
+                    .filter(Boolean)
+                    .map((name) => ({ name }));
+
+                  setSelectedCategories(
+                    categories.length > 0 ? categories : [{ name: "All" }]
+                  );
+                  return newIds;
+                });
               }}
             />
           </div>

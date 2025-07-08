@@ -6,21 +6,17 @@ import { countryIdToName } from "@/utils/iso_to_country";
 
 export default function WorldMapFilter({
   countriesWithRecipes,
-  selectedCountryId,
-  onCountrySelect,
+  selectedCountryIds,
+  onCountryToggle, 
 }) {
   const ref = useRef(null);
 
   useEffect(() => {
-    console.log("Rendering world map with countries:", countriesWithRecipes);
-    console.log("Country ID to Name mapping:", countryIdToName);
-    // Vega-Lite data para lookup
     const values = countriesWithRecipes.map((id) => ({
       id,
       hasRecipe: true,
     }));
 
-    // Dicionário auxiliar com nomes para tooltip
     const nameLookup = Object.entries(countryIdToName).map(([id, name]) => ({
       id: +id,
       name,
@@ -37,10 +33,7 @@ export default function WorldMapFilter({
         {
           lookup: "id",
           from: {
-            data: {
-              name: "countriesWithRecipes",
-              values: values,
-            },
+            data: { name: "countriesWithRecipes", values },
             key: "id",
             fields: ["hasRecipe"],
           },
@@ -48,28 +41,25 @@ export default function WorldMapFilter({
         {
           lookup: "id",
           from: {
-            data: {
-              name: "countryNames",
-              values: nameLookup,
-            },
+            data: { name: "countryNames", values: nameLookup },
             key: "id",
             fields: ["name"],
           },
         },
         {
-          calculate:
-            selectedCountryId !== null
-              ? `datum.id === ${selectedCountryId}`
-              : "false",
+          calculate: `indexof([${selectedCountryIds.join(
+            ","
+          )}], datum.id) >= 0`,
           as: "isSelected",
         },
       ],
       projection: { type: "equirectangular" },
       selection: {
         selectedCountry: {
-          type: "single",
+          type: "multi",
           on: "click",
           fields: ["id"],
+          toggle: true,
           empty: "none",
         },
       },
@@ -87,7 +77,6 @@ export default function WorldMapFilter({
           scale: { domain: [true, null], range: ["#10b981", "#e5e7eb"] },
           legend: null,
         },
-
         tooltip: { field: "name", type: "nominal" },
         stroke: {
           condition: { selection: "selectedCountry", value: "black" },
@@ -104,27 +93,22 @@ export default function WorldMapFilter({
     embed(ref.current, spec, { actions: false, renderer: "svg" }).then(
       (result) => {
         result.view.addSignalListener("selectedCountry", (name, value) => {
-          console.log("Signal name:", name); // Deve ser "selectedCountry"
-          console.log("Signal value:", value); // Aqui sim vem o valor do país selecionado
-
-          let countryId = null;
+          let clickedId = null;
 
           if (Array.isArray(value) && value.length > 0) {
-            countryId = value[0].id;
+            clickedId = value[value.length - 1].id; // pega o último clicado
           } else if (value && typeof value === "object" && "id" in value) {
-            countryId = value.id;
-          } else {
-            console.warn("Unexpected signal value format:", value);
+            clickedId = value.id;
           }
 
-          const nameResolved = countryIdToName[Number(countryId)];
-          console.log("Selected ID:", countryId, "Name:", nameResolved);
-
-          if (nameResolved) onCountrySelect(nameResolved);
+          if (clickedId != null) {
+            const nameResolved = countryIdToName[Number(clickedId)];
+            if (nameResolved) onCountryToggle(Number(clickedId), nameResolved);
+          }
         });
       }
     );
-  }, [countriesWithRecipes, onCountrySelect]);
+  }, [countriesWithRecipes, selectedCountryIds, onCountryToggle]);
 
   return (
     <div className="w-full flex justify-center">
