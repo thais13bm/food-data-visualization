@@ -112,9 +112,9 @@ export default function WorldMapFilter({
 
   return (
     <div className="w-full flex justify-center mb-4">
-      <div className="flex border rounded max-w-full overflow-hidden">
+      <div className="flex border rounded max-w-full overflow-hidden h-[400px]">
         {/* Legenda à esquerda */}
-        <div className="w-48 max-h-[400px] overflow-y-auto border-r p-2 text-sm text-muted-foreground">
+        <div className="w-48 h-full overflow-y-auto border-r p-2 text-sm text-muted-foreground">
           <div className="font-semibold mb-2">Selected countries</div>
           {selectedCountryIds.length === 0 ? (
             <div className="text-gray-400 italic">None</div>
@@ -130,7 +130,7 @@ export default function WorldMapFilter({
         </div>
 
         {/* Mapa mais próximo e centrado */}
-        <div className="pl-4 pr-2 py-2" ref={ref} />
+        <div className="pl-4 pr-2 py-2 flex-1 h-full" ref={ref} />
       </div>
     </div>
   );
