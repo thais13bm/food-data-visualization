@@ -30,7 +30,6 @@ export const categoryToCountryMap: Record<string, string> = {
   Norwegian: "Norway",
   Australian: "Australia",
   Thai: "Thailand",
-  Szechuan: "China",
   "Tex Mex": "United States of America",
   "Native American": "United States of America",
 };
