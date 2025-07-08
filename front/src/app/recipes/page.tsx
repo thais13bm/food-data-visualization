@@ -178,27 +178,18 @@ export default function RecipesPage() {
           <div className="border rounded p-2 mb-4">
             <WorldMapFilter
               countriesWithRecipes={countriesWithRecipes}
-              onCountrySelect={(countries) => {
+              onCountrySelect={(country) => {
+                console.log("Country clicked:", country);
                 const countryToCategoryMap = Object.fromEntries(
-                  Object.entries(categoryToCountryMap).map(([cat, country]) => [
-                    country,
-                    cat,
-                  ])
+                  Object.entries(categoryToCountryMap).map(([k, v]) => [v, k])
                 );
-
-                const selectedCategories = countries
-                  .map((c) => countryToCategoryMap[c])
-                  .filter(Boolean)
-                  .map((name) => ({ name }));
-
-                setSelectedCategories(
-                  selectedCategories.length
-                    ? selectedCategories
-                    : [{ name: "All" }]
-                );
-
-                console.log("Selected countries:", countries);
-                console.log("Mapped categories:", selectedCategories);
+                const category = countryToCategoryMap[country];
+                console.log("Selected country:", country);
+                console.log("Category for selected country:", category);
+                if (category) {
+                  setSelectedCategories([{ name: category }]);
+                  console.log("Selected category from map:", category);
+                }
               }}
             />
           </div>
