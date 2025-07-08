@@ -7,7 +7,7 @@ import { countryIdToName } from "@/utils/iso_to_country";
 export default function WorldMapFilter({
   countriesWithRecipes,
   selectedCountryIds,
-  onCountryToggle, 
+  onCountryToggle,
 }) {
   const ref = useRef(null);
 
@@ -111,8 +111,27 @@ export default function WorldMapFilter({
   }, [countriesWithRecipes, selectedCountryIds, onCountryToggle]);
 
   return (
-    <div className="w-full flex justify-center">
-      <div ref={ref} className="max-w-full" />
+    <div className="w-full flex justify-center mb-4">
+      <div className="flex border rounded max-w-full overflow-hidden">
+        {/* Legenda à esquerda */}
+        <div className="w-48 max-h-[400px] overflow-y-auto border-r p-2 text-sm text-muted-foreground">
+          <div className="font-semibold mb-2">Selected countries</div>
+          {selectedCountryIds.length === 0 ? (
+            <div className="text-gray-400 italic">None</div>
+          ) : (
+            <ul className="space-y-1">
+              {selectedCountryIds.map((id) => (
+                <li key={id} className="truncate">
+                  {countryIdToName[id] ?? `#${id}`}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* Mapa mais próximo e centrado */}
+        <div className="pl-4 pr-2 py-2" ref={ref} />
+      </div>
     </div>
   );
 }

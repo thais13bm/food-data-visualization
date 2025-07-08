@@ -176,37 +176,35 @@ export default function RecipesPage() {
             />
           </div>
         ) : (
-          <div className="border rounded p-2 mb-4">
-            <WorldMapFilter
-              countriesWithRecipes={countriesWithRecipes}
-              selectedCountryIds={selectedCountryIds}
-              onCountryToggle={(countryId) => {
-                setSelectedCountryIds((prevIds) => {
-                  const alreadySelected = prevIds.includes(countryId);
-                  const newIds = alreadySelected
-                    ? prevIds.filter((id) => id !== countryId)
-                    : [...prevIds, countryId];
+          <WorldMapFilter
+            countriesWithRecipes={countriesWithRecipes}
+            selectedCountryIds={selectedCountryIds}
+            onCountryToggle={(countryId) => {
+              setSelectedCountryIds((prevIds) => {
+                const alreadySelected = prevIds.includes(countryId);
+                const newIds = alreadySelected
+                  ? prevIds.filter((id) => id !== countryId)
+                  : [...prevIds, countryId];
 
-                  const idToCategory = Object.fromEntries(
-                    Object.entries(categoryToCountryMap).map(([cat, name]) => [
-                      countryNameToId[name],
-                      cat,
-                    ])
-                  );
+                const idToCategory = Object.fromEntries(
+                  Object.entries(categoryToCountryMap).map(([cat, name]) => [
+                    countryNameToId[name],
+                    cat,
+                  ])
+                );
 
-                  const categories = newIds
-                    .map((id) => idToCategory[id])
-                    .filter(Boolean)
-                    .map((name) => ({ name }));
+                const categories = newIds
+                  .map((id) => idToCategory[id])
+                  .filter(Boolean)
+                  .map((name) => ({ name }));
 
-                  setSelectedCategories(
-                    categories.length > 0 ? categories : [{ name: "All" }]
-                  );
-                  return newIds;
-                });
-              }}
-            />
-          </div>
+                setSelectedCategories(
+                  categories.length > 0 ? categories : [{ name: "All" }]
+                );
+                return newIds;
+              });
+            }}
+          />
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Bar Chart */}
