@@ -15,6 +15,7 @@ import {
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 import { LoadingOverlay } from "@/components/common/loading-overlay";
 import { categoryToCountryMap } from "@/utils/category_to_country_map";
+import { countryNameToId } from "@/utils/country_to_iso";
 
 const BarChart = dynamic(() => import("@/components/charts/barchart"), {
   ssr: false,
@@ -26,9 +27,12 @@ const WordCloudChart = dynamic(() => import("@/components/charts/wordcloud"), {
   ssr: false,
 });
 
-const ParallelCoordinatesChart = dynamic(() => import("@/components/charts/parallel_coord_plot"), {
-  ssr: false,
-});
+const ParallelCoordinatesChart = dynamic(
+  () => import("@/components/charts/parallel_coord_plot"),
+  {
+    ssr: false,
+  }
+);
 
 const WorldMapFilter = dynamic(
   () => import("@/components/charts/world_map_filter"),
@@ -68,6 +72,8 @@ export default function RecipesPage() {
         .map((d) => d.RecipeCategory)
         .filter((cat) => categoryToCountryMap[cat])
         .map((cat) => categoryToCountryMap[cat])
+        .filter((country) => countryNameToId[country])
+        .map((country) => countryNameToId[country])
     )
   );
 
@@ -172,15 +178,27 @@ export default function RecipesPage() {
           <div className="border rounded p-2 mb-4">
             <WorldMapFilter
               countriesWithRecipes={countriesWithRecipes}
-              onCountrySelect={(country) => {
+              onCountrySelect={(countries) => {
                 const countryToCategoryMap = Object.fromEntries(
-                  Object.entries(categoryToCountryMap).map(([k, v]) => [v, k])
+                  Object.entries(categoryToCountryMap).map(([cat, country]) => [
+                    country,
+                    cat,
+                  ])
                 );
-                const category = countryToCategoryMap[country];
-                if (category) {
-                  setSelectedCategories([{ name: category }]);
-                  setFilterMode("multiselect");
-                }
+
+                const selectedCategories = countries
+                  .map((c) => countryToCategoryMap[c])
+                  .filter(Boolean)
+                  .map((name) => ({ name }));
+
+                setSelectedCategories(
+                  selectedCategories.length
+                    ? selectedCategories
+                    : [{ name: "All" }]
+                );
+
+                console.log("Selected countries:", countries);
+                console.log("Mapped categories:", selectedCategories);
               }}
             />
           </div>
@@ -446,7 +464,7 @@ export default function RecipesPage() {
             <CardHeader className="text-center">
               <CardTitle>Parallel coordinates : nutrients</CardTitle>
             </CardHeader>
-            <CardContent >
+            <CardContent>
               <ParallelCoordinatesChart
                 data={data}
                 selectedCategories={selectedCategories.map((c) => c.name)}
