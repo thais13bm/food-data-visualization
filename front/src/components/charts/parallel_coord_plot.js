@@ -59,7 +59,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
       return entry;
     });
 
-    const VLspec = {
+   const VLspec = {
       $schema: "https://vega.github.io/schema/vega-lite/v5.json",
       description: "Parallel Coordinates Chart",
       data: { values: averages },
@@ -71,18 +71,16 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
             { fold: metrics, as: ["key", "value"] },
             {
               joinaggregate: [
-                { op: "min", field: "value", as: "min" },
                 { op: "max", field: "value", as: "max" },
               ],
               groupby: ["key"],
             },
             {
-              calculate:
-                "datum.max === datum.min ? 0.5 : (datum.value - datum.min) / (datum.max - datum.min)",
+              calculate: "datum.max === 0 ? 0 : datum.value / datum.max",
               as: "norm_val",
             },
             {
-              calculate: "(datum.min + datum.max) / 2",
+              calculate: "datum.max / 2",
               as: "mid",
             },
           ],
@@ -141,11 +139,12 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
                 {
                   mark: { type: "text", style: "label", align: "left", dx: 4 },
                   encoding: {
-                    text: {
-                      type: "quantitative",
-                      field: pos === 0 ? "max" : pos === 0.5 ? "mid" : "min",
-                      format: ".1f",
-                    },
+                    text:
+                      pos === 0
+                        ? { field: "max", type: "quantitative", format: ".1f" }
+                        : pos === 0.5
+                        ? { field: "mid", type: "quantitative", format: ".1f" }
+                        : { value: "0" },
                   },
                 },
                 {
