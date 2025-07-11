@@ -41,6 +41,13 @@ const WorldMapFilter = dynamic(
   }
 );
 
+const TreemapFilter = dynamic(
+  () => import("@/components/charts/treemap_filter"),
+  {
+    ssr: false,
+  }
+);
+
 interface Recipe {
   RecipeCategory: string;
 }
@@ -154,11 +161,12 @@ export default function RecipesPage() {
             <SelectContent>
               <SelectItem value="multiselect">Multiselect</SelectItem>
               <SelectItem value="map">World Map</SelectItem>
+              <SelectItem value="treemap">Tree Map</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        {filterMode === "multiselect" ? (
+        {filterMode === "multiselect" && (
           <div className="inline-block min-w-[300px] max-w-[600px] mb-4">
             <Multiselect
               data={allCategories}
@@ -175,7 +183,9 @@ export default function RecipesPage() {
               filterPlaceholder="Filter categories..."
             />
           </div>
-        ) : (
+        )}
+
+        {filterMode === "map" && (
           <WorldMapFilter
             countriesWithRecipes={countriesWithRecipes}
             selectedCountryIds={selectedCountryIds}
@@ -206,6 +216,49 @@ export default function RecipesPage() {
             }}
           />
         )}
+
+        {filterMode === "treemap" && (
+          <TreemapFilter
+            data={data}
+            selectedCategories={selectedCategories.map((c) => c.name)}
+            onCategoryToggle={(clickedNames) => {
+              const namesArray = Array.isArray(clickedNames)
+                ? clickedNames
+                : [clickedNames];
+
+              let newSelected = selectedCategories.filter(
+                (c) => c.name !== "All"
+              );
+
+              const allAreSelected = namesArray.every((name) =>
+                selectedCategories.some((c) => c.name === name)
+              );
+
+              if (allAreSelected) {
+                // Remove todos
+                newSelected = newSelected.filter(
+                  (c) => !namesArray.includes(c.name)
+                );
+              } else {
+                // Adiciona os que faltam
+                namesArray.forEach((name) => {
+                  if (!newSelected.some((c) => c.name === name)) {
+                    newSelected.push({ name });
+                  }
+                });
+              }
+
+              if (newSelected.length === rawCategories.length) {
+                setSelectedCategories([{ name: "All" }]);
+              } else if (newSelected.length === 0) {
+                setSelectedCategories([{ name: "All" }]);
+              } else {
+                setSelectedCategories(newSelected);
+              }
+            }}
+          />
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Bar Chart */}
           <Card>
