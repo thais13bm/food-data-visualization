@@ -62,16 +62,16 @@ export default function RecipesPage() {
   } = useSWR<Recipe[]>("/api/recipes", fetcher);
 
   const [selectedCategories, setSelectedCategories] = useState([
-    { name: "All" },
+    { name: "Potato" }, {name : "Chicken"}
   ]);
   const [open, setOpen] = useState(false);
 
   const [topN, setTopN] = useState(10);
   const [xFieldBarChart, setXFieldBarChart] = useState("Calories (kcal)");
   const [xFieldScatterPlot, setXFieldScatterPlot] = useState("Calories (kcal)");
-  const [yField, setYField] = useState("ProteinContent (g)");
+  const [yField, setYField] = useState("FatContent (g)");
   const [ascending, setAscending] = useState(false);
-  const [filterMode, setFilterMode] = useState("multiselect");
+  const [filterMode, setFilterMode] = useState("treemap");
   const [selectedCountryIds, setSelectedCountryIds] = useState<number[]>([]);
 
   const countriesWithRecipes = Array.from(
@@ -518,7 +518,7 @@ export default function RecipesPage() {
           </Card>
           <Card>
             <CardHeader className="text-center">
-              <CardTitle>Parallel coordinates : nutrients</CardTitle>
+              <CardTitle>Parallel coordinates : avg nutrients</CardTitle>
             </CardHeader>
             <CardContent>
               <ParallelCoordinatesChart

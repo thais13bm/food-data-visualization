@@ -34,6 +34,9 @@ export default function TreemapFilter({
       })),
     ];
 
+    const total = d3.sum(categories, (d) => d.value);
+
+
     // Adiciona a categoria "Others" como um nó simples
     if (rest.length > 0) {
       categories.push({
@@ -86,13 +89,19 @@ export default function TreemapFilter({
           const someSelected = d.data.grouped.some((cat) =>
             selectedCategories.includes(cat)
           );
-          return someSelected ? "#ef4444" : "#10b981";
+          return someSelected ? "#065f46" : "#10b981 ";
         }
-        return selectedCategories.includes(d.data.name) ? "#ef4444" : "#10b981";
+        return selectedCategories.includes(d.data.name) ? "#065f46" : "#10b981 ";
       })
       .attr("stroke", "#fff")
       .attr("width", (d) => d.x1 - d.x0)
       .attr("height", (d) => d.y1 - d.y0);
+    nodes
+      .append("title")
+      .text((d) => {
+        const pct = ((d.value / total) * 100).toFixed(1);
+        return `${d.data.name}: ${pct}%`;
+      });  
 
     nodes
       .append("text")
@@ -107,10 +116,10 @@ export default function TreemapFilter({
 
   return (
     <div className="w-full flex justify-center mb-4">
-      <div className="border rounded p-2 max-w-full overflow-hidden">
-        <div className="text-sm font-semibold mb-2">Treemap Filter</div>
+      
+        
         <div ref={containerRef} />
-      </div>
+      
     </div>
   );
 }
