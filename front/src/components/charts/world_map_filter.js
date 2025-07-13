@@ -69,7 +69,7 @@ export default function WorldMapFilter({
           condition: [
             {
               test: "datum.hasRecipe && datum.isSelected",
-              value: "#ef4444",
+              value: "#065f46",
             },
           ],
           field: "hasRecipe",

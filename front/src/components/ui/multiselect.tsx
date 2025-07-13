@@ -56,7 +56,7 @@ export function Multiselect<T>({
               role="combobox"
               aria-expanded={open}
               variant={"outline"}
-              className="w-full justify-between rounded-none rounded-t-xl"
+              className="w-full justify-between bg-white rounded-none rounded-t-xl"
             >
               <span className="text-base font-semibold">
                 {buttonPlaceholder}
@@ -64,7 +64,7 @@ export function Multiselect<T>({
               <ChevronsUpDown className="opacity-50" />
             </Button>
 
-            <div className="flex flex-wrap gap-2 border rounded-b-xl p-2 min-w-[300px]">
+            <div className="flex flex-wrap gap-2 border bg-white rounded-b-xl p-2 min-w-[300px]">
               {selectedOptions.length === 0 ? (
                 <p className="text-sm italic text-gray-500">
                   Nenhuma opção selecionada
@@ -73,7 +73,7 @@ export function Multiselect<T>({
                 selectedOptions.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-2 rounded-full border border-blue-600 px-3 py-1"
+                    className="flex items-center gap-2 bg-white rounded-full border border-blue-600 px-3 py-1"
                   >
                     <span>{_.get(item, optionLabel as string)}</span>
                     <Button
