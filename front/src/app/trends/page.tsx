@@ -6,13 +6,13 @@ import dynamic from "next/dynamic";
 interface Recipe {
   RecipeCategory: string;
   DatePublished: string;
-  // ...outros campos se necessário
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-// Importa dinamicamente o LineChart para evitar problemas de SSR
-const LineChart = dynamic(() => import("../../components/charts/LineChart"), { ssr: false });
+const LineChart = dynamic(() => import("../../components/charts/LineChart"), {
+  ssr: false,
+});
 
 export default function TrendsPage() {
   const {

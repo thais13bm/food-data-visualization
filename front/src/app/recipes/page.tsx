@@ -62,7 +62,8 @@ export default function RecipesPage() {
   } = useSWR<Recipe[]>("/api/recipes", fetcher);
 
   const [selectedCategories, setSelectedCategories] = useState([
-    { name: "Potato" }, {name : "Chicken"}
+    { name: "Potato" },
+    { name: "Chicken" },
   ]);
   const [open, setOpen] = useState(false);
 

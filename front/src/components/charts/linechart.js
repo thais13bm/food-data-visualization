@@ -10,7 +10,7 @@ export default function LineChart({ data }) {
   const [containerWidth, setContainerWidth] = useState(0);
 
   const margin = { left: 20, right: 20 };
-  const height = 600;
+  const height = 550;
 
   useEffect(() => {
     const resize = () => {
@@ -74,8 +74,8 @@ export default function LineChart({ data }) {
   }, [data, containerWidth]);
 
   return (
-    <div ref={containerRef} className="w-full" style={{ height }}>
-      <div ref={chartRef} className="w-full h-full" />
+    <div ref={containerRef} className="w-full">
+      <div ref={chartRef} className="w-full" />
     </div>
   );
 }
