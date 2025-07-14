@@ -10,6 +10,7 @@ export default function ScatterPlot({
   selectedCategories,
   xField,
   yField,
+  onBrushChange,
 }) {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
@@ -79,17 +80,31 @@ export default function ScatterPlot({
         };
       });
 
-    const spec = vl
-      .markPoint()
-      .data(top)
-      .encode(
-        vl.x().fieldQ(xField).title(xField),
-        vl.y().fieldQ(yField).title(yField),
-        vl.color().fieldN("RecipeCategory").title("Category").legend({
-          symbolLimit: 20,
-          columns: 1,
-        }),
-        vl.tooltip([
+    const selection = vl.selectInterval().name("brush");
+
+    const spec = {
+      data: { values: top },
+      width: containerWidth,
+      height: height,
+      mark: "point",
+      params: [
+        {
+          name: "brush",
+          select: { type: "interval" },
+        },
+      ],
+      encoding: {
+        x: { field: xField, type: "quantitative", title: xField },
+        y: { field: yField, type: "quantitative", title: yField },
+        color: {
+          condition: {
+            selection: "brush",
+            field: "RecipeCategory",
+            type: "nominal",
+          },
+          value: "lightgray",
+        },
+        tooltip: [
           { field: "Name", title: "Recipe" },
           { field: "RecipeCategory", title: "Category" },
           { field: "AuthorName", title: "Author" },
@@ -102,11 +117,9 @@ export default function ScatterPlot({
             format: "%d/%m/%Y",
           },
           { field: "image" },
-        ])
-      )
-      .width(containerWidth)
-      .height(height)
-      .toSpec();
+        ],
+      },
+    };
 
     embed(chartRef.current, spec, {
       actions: false,

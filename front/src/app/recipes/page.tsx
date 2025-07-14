@@ -74,6 +74,7 @@ export default function RecipesPage() {
   const [ascending, setAscending] = useState(false);
   const [filterMode, setFilterMode] = useState("treemap");
   const [selectedCountryIds, setSelectedCountryIds] = useState<number[]>([]);
+  const [brushedData, setBrushedData] = useState([]);
 
   const countriesWithRecipes = Array.from(
     new Set(
@@ -535,6 +536,7 @@ export default function RecipesPage() {
                 selectedCategories={selectedCategories.map((c) => c.name)}
                 xField={xFieldScatterPlot}
                 yField={yField}
+                onBrushChange={(brushed) => setBrushedData(brushed)}
               />
             </CardContent>
           </Card>
