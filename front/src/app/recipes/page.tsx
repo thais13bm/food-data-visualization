@@ -228,7 +228,7 @@ export default function RecipesPage() {
                   .map((name) => ({ name }));
 
                 setSelectedCategories(
-                  categories.length > 0 ? categories : [{ name: "All" }]
+                  categories.length > 0 ? categories : []
                 );
                 return newIds;
               });
