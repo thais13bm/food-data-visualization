@@ -8,6 +8,9 @@ export default function WorldMapFilter({
   countriesWithRecipes,
   selectedCountryIds,
   onCountryToggle,
+  selectedCategories,
+  filterMode,
+  setSelectedCountryIds,
 }) {
   const ref = useRef(null);
 
@@ -96,12 +99,15 @@ export default function WorldMapFilter({
           let clickedId = null;
 
           if (Array.isArray(value) && value.length > 0) {
-            clickedId = value[value.length - 1].id; // pega o último clicado
+            clickedId = value[value.length - 1].id;
           } else if (value && typeof value === "object" && "id" in value) {
             clickedId = value.id;
           }
 
-          if (clickedId != null) {
+          if (
+            clickedId != null &&
+            countriesWithRecipes.includes(Number(clickedId))
+          ) {
             const nameResolved = countryIdToName[Number(clickedId)];
             if (nameResolved) onCountryToggle(Number(clickedId), nameResolved);
           }
@@ -109,6 +115,23 @@ export default function WorldMapFilter({
       }
     );
   }, [countriesWithRecipes, selectedCountryIds, onCountryToggle]);
+
+  useEffect(() => {
+    if (filterMode !== "multiselect") return;
+
+    const idToCategory = Object.fromEntries(
+      Object.entries(categoryToCountryMap).map(([cat, name]) => [
+        cat,
+        countryNameToId[name],
+      ])
+    );
+
+    const newCountryIds = selectedCategories
+      .map((c) => idToCategory[c.name])
+      .filter((id) => typeof id === "number");
+
+    setSelectedCountryIds(newCountryIds);
+  }, [selectedCategories, filterMode]);
 
   return (
     <div className="w-full flex justify-center mb-4">

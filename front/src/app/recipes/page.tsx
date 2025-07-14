@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { Multiselect } from "@/components/ui/multiselect";
 import dynamic from "next/dynamic";
@@ -124,6 +124,23 @@ export default function RecipesPage() {
     );
   };
 
+  useEffect(() => {
+    if (filterMode !== "map") return;
+
+    const idToCategory = Object.fromEntries(
+      Object.entries(categoryToCountryMap).map(([cat, name]) => [
+        cat,
+        countryNameToId[name],
+      ])
+    );
+
+    const newCountryIds = selectedCategories
+      .map((c) => idToCategory[c.name])
+      .filter((id) => typeof id === "number");
+
+    setSelectedCountryIds(newCountryIds);
+  }, [filterMode, selectedCategories]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center">
@@ -131,13 +148,6 @@ export default function RecipesPage() {
       </div>
     );
   }
-
-  // console.log(
-  //   "Categorias distintas:",
-  //   Array.from(new Set(data.map((d) => d.RecipeCategory)))
-  // );
-
-  // console.log("Mapeamento categoryToCountryMap:", categoryToCountryMap);
 
   if (error) return <p>Error loading data</p>;
   return (
@@ -215,6 +225,9 @@ export default function RecipesPage() {
                 return newIds;
               });
             }}
+            selectedCategories={selectedCategories}
+            filterMode={filterMode}
+            setSelectedCountryIds={setSelectedCountryIds}
           />
         )}
 
