@@ -141,6 +141,14 @@ export default function RecipesPage() {
     setSelectedCountryIds(newCountryIds);
   }, [filterMode, selectedCategories]);
 
+
+  useEffect(() => {
+    if (filterMode === "treemap") {
+      setSelectedCategories([{ name: "Potato" }, { name: "Chicken" }]);
+    }
+  }, [filterMode]);
+
+
   if (isLoading) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center">
@@ -265,7 +273,7 @@ export default function RecipesPage() {
               if (newSelected.length === rawCategories.length) {
                 setSelectedCategories([{ name: "All" }]);
               } else if (newSelected.length === 0) {
-                setSelectedCategories([{ name: "All" }]);
+                setSelectedCategories([]);
               } else {
                 setSelectedCategories(newSelected);
               }
