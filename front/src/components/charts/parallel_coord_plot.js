@@ -61,33 +61,33 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
 
     const global_averages = Array.from(
       new Set(data.map((d) => d.RecipeCategory))
-    )
-      .map((category) => {
-        const items = data
-          .filter((d) => d.RecipeCategory === category)
-          .filter((d) => metrics.every((m) => d[m] !== undefined && !isNaN(+d[m])));
-        const entry = { RecipeCategory: category };
-        metrics.forEach((m) => {
-          entry[m] = d3.mean(items, (d) => +d[m]) || 0;
-        });
-        return entry;
+    ).map((category) => {
+      const items = data
+        .filter((d) => d.RecipeCategory === category)
+        .filter((d) =>
+          metrics.every((m) => d[m] !== undefined && !isNaN(+d[m]))
+        );
+      const entry = { RecipeCategory: category };
+      metrics.forEach((m) => {
+        entry[m] = d3.mean(items, (d) => +d[m]) || 0;
       });
+      return entry;
+    });
 
     // 🔽 MODIFICADO: calcula min/max/mid baseado nas médias das categorias
     const metricScales = metrics.map((m) => {
-      const values = global_averages.map((d) => d[m]).filter(v => !isNaN(v));
+      const values = global_averages.map((d) => d[m]).filter((v) => !isNaN(v));
       const min = d3.min(values) || 0;
       const max = d3.max(values) || 0;
       const mid = (min + max) / 2;
-      
+
       return {
         key: m,
         min,
         max,
-        mid
+        mid,
       };
     });
-
 
     const VLspec = {
       $schema: "https://vega.github.io/schema/vega-lite/v5.json",
@@ -102,7 +102,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
               lookup: "key",
               from: {
                 data: {
-                  values: metricScales,  // deve conter os min, max, mid por métrica
+                  values: metricScales, // deve conter os min, max, mid por métrica
                 },
                 key: "key",
                 fields: ["min", "max", "mid"],
@@ -169,7 +169,11 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
                     y: { type: "quantitative", field: "norm_val" },
                     color: { field: "RecipeCategory", type: "nominal" },
                     tooltip: [
-                      { field: "RecipeCategory", type: "nominal", title: "Category" },
+                      {
+                        field: "RecipeCategory",
+                        type: "nominal",
+                        title: "Category",
+                      },
                       { field: "key", type: "nominal", title: "Metric" },
                       { field: "value", type: "quantitative", title: "Value" },
                     ],
@@ -204,7 +208,6 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
       ],
       config: { view: { stroke: null } },
     };
-
 
     embed(chartRef.current, VLspec, {
       actions: false,
