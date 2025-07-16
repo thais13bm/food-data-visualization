@@ -69,29 +69,43 @@ export default function WorldMapFilter({
       mark: "geoshape",
       encoding: {
         color: {
+
           condition: [
             {
               test: "datum.hasRecipe && datum.isSelected",
               value: "#065f46",
             },
           ],
+
           field: "hasRecipe",
           type: "nominal",
           scale: { domain: [true, null], range: ["#10b981", "#e5e7eb"] },
-          legend: null,
+          legend: {title: "Has recipes?",
+                  orient: "left",      // ou "right", "left", etc.
+                  labelFontSize: 16,     // aumenta o tamanho da fonte das labels
+                  titleFontSize: 18,     // aumenta o tamanho da fonte do título
+                  //symbolSize: 20,       // aumenta o tamanho dos quadrados coloridos
+                  //padding: 10,
+                  //offset: 10,
+                  // 
+                  },
         },
         tooltip: { field: "name", type: "nominal" },
         stroke: {
-          condition: { selection: "selectedCountry", value: "black" },
-          value: null,
+          condition: { 
+            selection: "selectedCountry",
+             value: "black" },
+          value: null, // nenhum contorno quando não selecionado
         },
         strokeWidth: {
-          condition: { selection: "selectedCountry", value: 2 },
-          value: 0.5,
+          condition: { 
+            selection: "selectedCountry",
+             value: 2 },
+          value: 0.5, // borda fina padrão
         },
+
       },
-      config: { view: { stroke: null } },
-    };
+      };
 
     embed(ref.current, spec, { actions: false, renderer: "svg" }).then(
       (result) => {
@@ -135,26 +149,13 @@ export default function WorldMapFilter({
 
   return (
     <div className="w-full flex justify-center mb-4">
-      <div className="flex border rounded max-w-full overflow-hidden h-[400px]">
+      
         {/* Legenda à esquerda */}
-        <div className="w-48 h-full overflow-y-auto border-r p-2 text-sm text-muted-foreground">
-          <div className="font-semibold mb-2">Selected countries</div>
-          {selectedCountryIds.length === 0 ? (
-            <div className="text-gray-400 italic">None</div>
-          ) : (
-            <ul className="space-y-1">
-              {selectedCountryIds.map((id) => (
-                <li key={id} className="truncate">
-                  {countryIdToName[id] ?? `#${id}`}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        
 
         {/* Mapa mais próximo e centrado */}
         <div className="pl-4 pr-2 py-2 flex-1 h-full" ref={ref} />
-      </div>
+      
     </div>
   );
 }
