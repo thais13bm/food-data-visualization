@@ -59,29 +59,45 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
       return entry;
     });
 
-   const VLspec = {
+    // 🔽 NOVO: calcula min/max globais das métricas
+    const globalExtents = {};
+    metrics.forEach((m) => {
+      const validValues = data
+        .map((d) => +d[m])
+        .filter((v) => !isNaN(v) && v !== undefined);
+      globalExtents[m] = d3.extent(validValues); // [min, max]
+    });
+
+    const metricScales = metrics.map((m) => ({
+      key: m,
+      min: globalExtents[m][0],
+      max: globalExtents[m][1],
+      mid: (globalExtents[m][0] + globalExtents[m][1]) / 2,
+    }));
+
+    const VLspec = {
       $schema: "https://vega.github.io/schema/vega-lite/v5.json",
       description: "Parallel Coordinates Chart",
       data: { values: averages },
       vconcat: [
         {
           transform: [
-            { filter: "datum['Calories (kcal)']" },
             { window: [{ op: "count", as: "index" }] },
             { fold: metrics, as: ["key", "value"] },
             {
-              joinaggregate: [
-                { op: "max", field: "value", as: "max" },
-              ],
-              groupby: ["key"],
+              lookup: "key",
+              from: {
+                data: {
+                  values: metricScales,  // deve conter os min, max, mid por métrica
+                },
+                key: "key",
+                fields: ["min", "max", "mid"],
+              },
             },
             {
-              calculate: "datum.max === 0 ? 0 : datum.value / datum.max",
+              calculate:
+                "(datum.max - datum.min) === 0 ? 0 : (datum.value - datum.min) / (datum.max - datum.min)",
               as: "norm_val",
-            },
-            {
-              calculate: "datum.max / 2",
-              as: "mid",
             },
           ],
           width: containerWidth,
@@ -103,32 +119,49 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
               },
             },
             {
-              mark: "line",
-              encoding: {
-                color: {
-                  type: "nominal",
-                  field: "RecipeCategory",
-                  legend: {
-                    title: "Category",
-                    orient: "bottom",
-                    symbolLimit: 10,
+              layer: [
+                {
+                  mark: "line",
+                  encoding: {
+                    color: {
+                      type: "nominal",
+                      field: "RecipeCategory",
+                      legend: {
+                        title: "Category",
+                        orient: "bottom",
+                        symbolLimit: 10,
+                      },
+                    },
+                    detail: { field: "index" },
+                    opacity: { value: 1 },
+                    x: { type: "nominal", field: "key" },
+                    y: {
+                      type: "quantitative",
+                      field: "norm_val",
+                      axis: null,
+                      scale: { domain: [0, 1] },
+                    },
                   },
                 },
-                detail: { field: "index" },
-                opacity: { value: 1 },
-                x: { type: "nominal", field: "key" },
-                y: {
-                  labelFontSize: 14,
-                  type: "quantitative",
-                  field: "norm_val",
-                  axis: null,
+                {
+                  mark: {
+                    type: "point",
+                    filled: true,
+                    size: 60,
+                    opacity: 1,
+                  },
+                  encoding: {
+                    x: { type: "nominal", field: "key" },
+                    y: { type: "quantitative", field: "norm_val" },
+                    color: { field: "RecipeCategory", type: "nominal" },
+                    tooltip: [
+                      { field: "RecipeCategory", type: "nominal", title: "Category" },
+                      { field: "key", type: "nominal", title: "Metric" },
+                      { field: "value", type: "quantitative", title: "Value" },
+                    ],
+                  },
                 },
-                tooltip: metrics.map((m) => ({
-                  field: m,
-                  type: "quantitative",
-                  title: m,
-                })),
-              },
+              ],
             },
             ...[0, 0.5, 1].map((pos) => ({
               encoding: {
@@ -157,6 +190,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
       ],
       config: { view: { stroke: null } },
     };
+
 
     embed(chartRef.current, VLspec, {
       actions: false,
