@@ -59,21 +59,35 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
       return entry;
     });
 
-    // 🔽 NOVO: calcula min/max globais das métricas
-    const globalExtents = {};
-    metrics.forEach((m) => {
-      const validValues = data
-        .map((d) => +d[m])
-        .filter((v) => !isNaN(v) && v !== undefined);
-      globalExtents[m] = d3.extent(validValues); // [min, max]
+    const global_averages = Array.from(
+      new Set(data.map((d) => d.RecipeCategory))
+    )
+      .map((category) => {
+        const items = data
+          .filter((d) => d.RecipeCategory === category)
+          .filter((d) => metrics.every((m) => d[m] !== undefined && !isNaN(+d[m])));
+        const entry = { RecipeCategory: category };
+        metrics.forEach((m) => {
+          entry[m] = d3.mean(items, (d) => +d[m]) || 0;
+        });
+        return entry;
+      });
+
+    // 🔽 MODIFICADO: calcula min/max/mid baseado nas médias das categorias
+    const metricScales = metrics.map((m) => {
+      const values = global_averages.map((d) => d[m]).filter(v => !isNaN(v));
+      const min = d3.min(values) || 0;
+      const max = d3.max(values) || 0;
+      const mid = (min + max) / 2;
+      
+      return {
+        key: m,
+        min,
+        max,
+        mid
+      };
     });
 
-    const metricScales = metrics.map((m) => ({
-      key: m,
-      min: globalExtents[m][0],
-      max: globalExtents[m][1],
-      mid: (globalExtents[m][0] + globalExtents[m][1]) / 2,
-    }));
 
     const VLspec = {
       $schema: "https://vega.github.io/schema/vega-lite/v5.json",
