@@ -127,7 +127,7 @@ export default function RecipeDashboard({
           data: { values: filteredWithImages },
           width: containerWidth / 3 - 15,
           height: 250,
-          transform: [{ filter: { selection: "selectPoint" } }],
+          // transform: [{ filter: { selection: "selectPoint" } }],
           params: [
             { name: "brush", select: { type: "interval", empty: "none" } },
           ],
@@ -137,11 +137,11 @@ export default function RecipeDashboard({
             y: { field: yFieldScatter, type: "quantitative" },
             color: {
               condition: {
-                selection: "brush",
+                selection: "selectPoint",
                 field: "RecipeCategory",
                 type: "nominal",
               },
-              value: "lightgray",
+              value: "#ccc",
             },
             tooltip: [
               { field: "Name" },
