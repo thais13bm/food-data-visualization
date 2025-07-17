@@ -91,7 +91,9 @@ export default function RecipeDashboard({
           data: { values: filtered },
           width: containerWidth / 3 - 15,
           height: 250,
-          params: [{ name: "brush", select: { type: "interval" } }],
+          params: [
+            { name: "brush", select: { type: "interval", empty: "none" } },
+          ],
           mark: "point",
           encoding: {
             x: { field: xFieldScatter, type: "quantitative" },
@@ -216,7 +218,7 @@ export default function RecipeDashboard({
               encoding: {
                 x: { field: "key", type: "nominal" },
                 y: { field: "norm_val", type: "quantitative" },
-                text: { field: "min", type: "quantitative", format: ".1f" }, // ⬅️ era max
+                text: { field: "min", type: "quantitative", format: ".1f" },
               },
             },
 
@@ -233,7 +235,7 @@ export default function RecipeDashboard({
               encoding: {
                 x: { field: "key", type: "nominal" },
                 y: { field: "norm_val", type: "quantitative" },
-                text: { field: "max", type: "quantitative", format: ".1f" }, // ⬅️ era min
+                text: { field: "max", type: "quantitative", format: ".1f" },
               },
             },
           ],
@@ -336,7 +338,7 @@ export default function RecipeDashboard({
       )}
       <div
         ref={chartRef}
-        className="w-full overflow-x-auto"
+        className="w-full overflow-x-auto rounded-lg border border-gray-300"
         style={{ whiteSpace: "nowrap" }}
       />
       <div>

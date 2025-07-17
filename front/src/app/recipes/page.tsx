@@ -261,168 +261,215 @@ export default function RecipesPage() {
           />
         )}
 
-        <div>
-          <div className="controls flex flex-wrap gap-4 mb-6">
-            {/* Select X Field Bar Chart */}
-            <Select value={xFieldBarChart} onValueChange={setXFieldBarChart}>
-              <SelectTrigger className="w-full h-9 text-sm">
-                <SelectValue placeholder="Choose the field" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="AggregatedRating">
-                  Aggregated Rating
-                </SelectItem>
-                <SelectItem value="ReviewCount">Review Count</SelectItem>
-                <SelectItem value="Calories (kcal)">Calories (kcal)</SelectItem>
-                <SelectItem value="FatContent (g)">Fat Content</SelectItem>
-                <SelectItem value="SaturatedFatContent (g)">
-                  Saturated Fat Content
-                </SelectItem>
-                <SelectItem value="CholesterolContent (mg)">
-                  Cholesterol Content
-                </SelectItem>
-                <SelectItem value="SodiumContent (mg)">
-                  Sodium Content
-                </SelectItem>
-                <SelectItem value="CarbohydrateContent (g)">
-                  Carbohydrate Content
-                </SelectItem>
-                <SelectItem value="FiberContent (g)">Fiber Content</SelectItem>
-                <SelectItem value="SugarContent (g)">Sugar Content</SelectItem>
-                <SelectItem value="ProteinContent (g)">
-                  Protein Content
-                </SelectItem>
-                <SelectItem value="RecipeServings">Recipe Servings</SelectItem>
-                <SelectItem value="NumIngredients">
-                  Number of Ingredients
-                </SelectItem>
-                <SelectItem value="CookTime_hours">
-                  Cook Time (hours)
-                </SelectItem>
-                <SelectItem value="PrepTime_hours">
-                  Prep Time (hours)
-                </SelectItem>
-                <SelectItem value="TotalTime_hours">
-                  Total Time (hours)
-                </SelectItem>
-              </SelectContent>
-            </Select>
+        <div className="grid gap-8">
+          <div className="flex flex-wrap gap-8">
+            {/* Bar Chart Section */}
+            <div className="rounded-xl border p-4 bg-muted/5 space-y-4">
+              <h3 className="text-sm font-semibold">Bar Chart</h3>
+              <div className="flex flex-wrap gap-4">
+                {/* Select X Field */}
+                <Select
+                  value={xFieldBarChart}
+                  onValueChange={setXFieldBarChart}
+                >
+                  <SelectTrigger className="w-[220px] h-9 text-sm">
+                    <SelectValue placeholder="Choose X field" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="AggregatedRating">
+                      Aggregated Rating
+                    </SelectItem>
+                    <SelectItem value="ReviewCount">Review Count</SelectItem>
+                    <SelectItem value="Calories (kcal)">
+                      Calories (kcal)
+                    </SelectItem>
+                    <SelectItem value="FatContent (g)">Fat Content</SelectItem>
+                    <SelectItem value="SaturatedFatContent (g)">
+                      Saturated Fat Content
+                    </SelectItem>
+                    <SelectItem value="CholesterolContent (mg)">
+                      Cholesterol Content
+                    </SelectItem>
+                    <SelectItem value="SodiumContent (mg)">
+                      Sodium Content
+                    </SelectItem>
+                    <SelectItem value="CarbohydrateContent (g)">
+                      Carbohydrate Content
+                    </SelectItem>
+                    <SelectItem value="FiberContent (g)">
+                      Fiber Content
+                    </SelectItem>
+                    <SelectItem value="SugarContent (g)">
+                      Sugar Content
+                    </SelectItem>
+                    <SelectItem value="ProteinContent (g)">
+                      Protein Content
+                    </SelectItem>
+                    <SelectItem value="RecipeServings">
+                      Recipe Servings
+                    </SelectItem>
+                    <SelectItem value="NumIngredients">
+                      Number of Ingredients
+                    </SelectItem>
+                    <SelectItem value="CookTime_hours">
+                      Cook Time (hours)
+                    </SelectItem>
+                    <SelectItem value="PrepTime_hours">
+                      Prep Time (hours)
+                    </SelectItem>
+                    <SelectItem value="TotalTime_hours">
+                      Total Time (hours)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
 
-            {/* Input Quantity (topN) */}
-            <input
-              type="number"
-              min={1}
-              max={50}
-              value={topN}
-              onChange={(e) => setTopN(Number(e.target.value))}
-              className="input"
-            />
+                {/* Top N Input */}
+                <input
+                  type="number"
+                  min={1}
+                  max={50}
+                  value={topN}
+                  onChange={(e) => setTopN(Number(e.target.value))}
+                  className="input w-[100px] h-9 text-sm border px-2 rounded"
+                />
 
-            {/* Toggle Ascending */}
-            <button onClick={() => setAscending((prev) => !prev)}>
-              {ascending ? "Asc" : "Desc"}
-            </button>
+                {/* Asc/Desc Toggle */}
+                <button
+                  onClick={() => setAscending((prev) => !prev)}
+                  className="px-3 py-1 border rounded text-sm"
+                >
+                  {ascending ? "Asc" : "Desc"}
+                </button>
+              </div>
+            </div>
 
-            {/* Select X Field Scatter Plot */}
-            <Select value={xFieldScatter} onValueChange={setXFieldScatter}>
-              <SelectTrigger className="w-full h-9 text-sm">
-                <SelectValue placeholder="Choose the field" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="AggregatedRating">
-                  Aggregated Rating
-                </SelectItem>
-                <SelectItem value="ReviewCount">Review Count</SelectItem>
-                <SelectItem value="Calories (kcal)">Calories (kcal)</SelectItem>
-                <SelectItem value="FatContent (g)">Fat Content</SelectItem>
-                <SelectItem value="SaturatedFatContent (g)">
-                  Saturated Fat Content
-                </SelectItem>
-                <SelectItem value="CholesterolContent (mg)">
-                  Cholesterol Content
-                </SelectItem>
-                <SelectItem value="SodiumContent (mg)">
-                  Sodium Content
-                </SelectItem>
-                <SelectItem value="CarbohydrateContent (g)">
-                  Carbohydrate Content
-                </SelectItem>
-                <SelectItem value="FiberContent (g)">Fiber Content</SelectItem>
-                <SelectItem value="SugarContent (g)">Sugar Content</SelectItem>
-                <SelectItem value="ProteinContent (g)">
-                  Protein Content
-                </SelectItem>
-                <SelectItem value="RecipeServings">Recipe Servings</SelectItem>
-                <SelectItem value="NumIngredients">
-                  Number of Ingredients
-                </SelectItem>
-                <SelectItem value="CookTime_hours">
-                  Cook Time (hours)
-                </SelectItem>
-                <SelectItem value="PrepTime_hours">
-                  Prep Time (hours)
-                </SelectItem>
-                <SelectItem value="TotalTime_hours">
-                  Total Time (hours)
-                </SelectItem>
-              </SelectContent>
-            </Select>
+            {/* Scatter Plot Section */}
+            <div className="rounded-xl border p-4 bg-muted/5 space-y-4">
+              <h3 className="text-sm font-semibold">Scatter Plot</h3>
+              <div className="flex flex-wrap gap-4">
+                {/* X Field */}
+                <Select value={xFieldScatter} onValueChange={setXFieldScatter}>
+                  <SelectTrigger className="w-[220px] h-9 text-sm">
+                    <SelectValue placeholder="X Axis" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="AggregatedRating">
+                      Aggregated Rating
+                    </SelectItem>
+                    <SelectItem value="ReviewCount">Review Count</SelectItem>
+                    <SelectItem value="Calories (kcal)">
+                      Calories (kcal)
+                    </SelectItem>
+                    <SelectItem value="FatContent (g)">Fat Content</SelectItem>
+                    <SelectItem value="SaturatedFatContent (g)">
+                      Saturated Fat Content
+                    </SelectItem>
+                    <SelectItem value="CholesterolContent (mg)">
+                      Cholesterol Content
+                    </SelectItem>
+                    <SelectItem value="SodiumContent (mg)">
+                      Sodium Content
+                    </SelectItem>
+                    <SelectItem value="CarbohydrateContent (g)">
+                      Carbohydrate Content
+                    </SelectItem>
+                    <SelectItem value="FiberContent (g)">
+                      Fiber Content
+                    </SelectItem>
+                    <SelectItem value="SugarContent (g)">
+                      Sugar Content
+                    </SelectItem>
+                    <SelectItem value="ProteinContent (g)">
+                      Protein Content
+                    </SelectItem>
+                    <SelectItem value="RecipeServings">
+                      Recipe Servings
+                    </SelectItem>
+                    <SelectItem value="NumIngredients">
+                      Number of Ingredients
+                    </SelectItem>
+                    <SelectItem value="CookTime_hours">
+                      Cook Time (hours)
+                    </SelectItem>
+                    <SelectItem value="PrepTime_hours">
+                      Prep Time (hours)
+                    </SelectItem>
+                    <SelectItem value="TotalTime_hours">
+                      Total Time (hours)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
 
-            {/* Select Y Field Scatter Plot */}
-            <Select value={yFieldScatter} onValueChange={setYFieldScatter}>
-              <SelectTrigger className="w-full h-9 text-sm">
-                <SelectValue placeholder="Choose the field" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="AggregatedRating">
-                  Aggregated Rating
-                </SelectItem>
-                <SelectItem value="ReviewCount">Review Count</SelectItem>
-                <SelectItem value="Calories (kcal)">Calories (kcal)</SelectItem>
-                <SelectItem value="FatContent (g)">Fat Content</SelectItem>
-                <SelectItem value="SaturatedFatContent (g)">
-                  Saturated Fat Content
-                </SelectItem>
-                <SelectItem value="CholesterolContent (mg)">
-                  Cholesterol Content
-                </SelectItem>
-                <SelectItem value="SodiumContent (mg)">
-                  Sodium Content
-                </SelectItem>
-                <SelectItem value="CarbohydrateContent (g)">
-                  Carbohydrate Content
-                </SelectItem>
-                <SelectItem value="FiberContent (g)">Fiber Content</SelectItem>
-                <SelectItem value="SugarContent (g)">Sugar Content</SelectItem>
-                <SelectItem value="ProteinContent (g)">
-                  Protein Content
-                </SelectItem>
-                <SelectItem value="RecipeServings">Recipe Servings</SelectItem>
-                <SelectItem value="NumIngredients">
-                  Number of Ingredients
-                </SelectItem>
-                <SelectItem value="CookTime_hours">
-                  Cook Time (hours)
-                </SelectItem>
-                <SelectItem value="PrepTime_hours">
-                  Prep Time (hours)
-                </SelectItem>
-                <SelectItem value="TotalTime_hours">
-                  Total Time (hours)
-                </SelectItem>
-              </SelectContent>
-            </Select>
+                {/* Y Field */}
+                <Select value={yFieldScatter} onValueChange={setYFieldScatter}>
+                  <SelectTrigger className="w-[220px] h-9 text-sm">
+                    <SelectValue placeholder="Y Axis" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="AggregatedRating">
+                      Aggregated Rating
+                    </SelectItem>
+                    <SelectItem value="ReviewCount">Review Count</SelectItem>
+                    <SelectItem value="Calories (kcal)">
+                      Calories (kcal)
+                    </SelectItem>
+                    <SelectItem value="FatContent (g)">Fat Content</SelectItem>
+                    <SelectItem value="SaturatedFatContent (g)">
+                      Saturated Fat Content
+                    </SelectItem>
+                    <SelectItem value="CholesterolContent (mg)">
+                      Cholesterol Content
+                    </SelectItem>
+                    <SelectItem value="SodiumContent (mg)">
+                      Sodium Content
+                    </SelectItem>
+                    <SelectItem value="CarbohydrateContent (g)">
+                      Carbohydrate Content
+                    </SelectItem>
+                    <SelectItem value="FiberContent (g)">
+                      Fiber Content
+                    </SelectItem>
+                    <SelectItem value="SugarContent (g)">
+                      Sugar Content
+                    </SelectItem>
+                    <SelectItem value="ProteinContent (g)">
+                      Protein Content
+                    </SelectItem>
+                    <SelectItem value="RecipeServings">
+                      Recipe Servings
+                    </SelectItem>
+                    <SelectItem value="NumIngredients">
+                      Number of Ingredients
+                    </SelectItem>
+                    <SelectItem value="CookTime_hours">
+                      Cook Time (hours)
+                    </SelectItem>
+                    <SelectItem value="PrepTime_hours">
+                      Prep Time (hours)
+                    </SelectItem>
+                    <SelectItem value="TotalTime_hours">
+                      Total Time (hours)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
 
-          <RecipeDashboard
-            data={data}
-            selectedCategories={selectedCategories.map((c) => c.name)}
-            xFieldBarChart={xFieldBarChart}
-            topN={topN}
-            ascending={ascending}
-            xFieldScatter={xFieldScatter}
-            yFieldScatter={yFieldScatter}
-          />
+          {/* Dashboard Charts */}
+          <div className="overflow-x-auto w-full">
+            <div className="min-w-[768px] max-w-full">
+              <RecipeDashboard
+                data={data}
+                selectedCategories={selectedCategories.map((c) => c.name)}
+                xFieldBarChart={xFieldBarChart}
+                topN={topN}
+                ascending={ascending}
+                xFieldScatter={xFieldScatter}
+                yFieldScatter={yFieldScatter}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </>
