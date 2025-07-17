@@ -46,6 +46,21 @@ export default function RecipeDashboard({
         d["FatContent (g)"]
     );
 
+    const filteredWithImages = filtered.map((d) => {
+      let imageUrl = "";
+      try {
+        const parsed = JSON.parse(d.Images.replace(/'/g, '"'));
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          imageUrl = parsed[0];
+        } else if (typeof parsed === "string") {
+          imageUrl = parsed;
+        }
+      } catch {
+        imageUrl = d.Images.replace(/['"]/g, "");
+      }
+      return { ...d, image: imageUrl };
+    });
+
     const spec = {
       $schema: "https://vega.github.io/schema/vega-lite/v5.json",
       hconcat: [
@@ -53,7 +68,7 @@ export default function RecipeDashboard({
         {
           title: "Bar Chart",
           data: {
-            values: [...filtered]
+            values: [...filteredWithImages]
               .sort((a, b) =>
                 ascending
                   ? a[xFieldBarChart] - b[xFieldBarChart]
@@ -95,6 +110,13 @@ export default function RecipeDashboard({
               { field: "Name" },
               { field: "RecipeCategory" },
               { field: xFieldBarChart },
+              {
+                field: "DatePublished",
+                type: "temporal",
+                title: "Published",
+                format: "%d/%m/%Y",
+              },
+              { field: "image" },
             ],
           },
         },
@@ -102,7 +124,7 @@ export default function RecipeDashboard({
         // ScatterPlot
         {
           title: "Scatter Plot",
-          data: { values: filtered },
+          data: { values: filteredWithImages },
           width: containerWidth / 3 - 15,
           height: 250,
           transform: [{ filter: { selection: "selectPoint" } }],
@@ -125,6 +147,13 @@ export default function RecipeDashboard({
               { field: "Name" },
               { field: xFieldScatter },
               { field: yFieldScatter },
+              {
+                field: "DatePublished",
+                type: "temporal",
+                title: "Published",
+                format: "%d/%m/%Y",
+              },
+              { field: "image" },
             ],
           },
         },
@@ -132,7 +161,7 @@ export default function RecipeDashboard({
         // Paralela
         {
           title: "Parallel Coordinates",
-          data: { values: filtered },
+          data: { values: filteredWithImages },
           transform: [
             {
               calculate:
@@ -168,7 +197,7 @@ export default function RecipeDashboard({
                       "ProteinContent (g)",
                     ];
                     return metrics.map((m) => {
-                      const values = filtered
+                      const values = filteredWithImages
                         .map((d) => +d[m])
                         .filter((v) => !isNaN(v));
                       const min = d3.min(values) ?? 0;
@@ -226,6 +255,13 @@ export default function RecipeDashboard({
                   { field: "Name", type: "nominal" },
                   { field: "key", type: "nominal", title: "Métrica" },
                   { field: "value", type: "quantitative", title: "Valor real" },
+                  {
+                    field: "DatePublished",
+                    type: "temporal",
+                    title: "Published",
+                    format: "%d/%m/%Y",
+                  },
+                  { field: "image" },
                 ],
               },
             },
