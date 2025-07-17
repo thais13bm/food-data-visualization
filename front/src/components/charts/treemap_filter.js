@@ -3,11 +3,35 @@
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
+
+
+function LegendItem({ color, label }) {
+  return (
+    <div className="flex items-center gap-2">
+      <div 
+        style={{ 
+          width: 20, 
+          height: 20, 
+          backgroundColor: color, 
+          borderRadius: 3,
+          border: "1px solid #ccc",
+        }} 
+      />
+      <span>{label}</span>
+    </div>
+  );
+}
+
+
+
 export default function TreemapFilter({
   data,
   selectedCategories,
   onCategoryToggle,
 }) {
+
+
+
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -112,6 +136,9 @@ export default function TreemapFilter({
       .text((d) =>
         d.data.name.length > 18 ? d.data.name.slice(0, 15) + "…" : d.data.name
       );
+
+     
+
   }, [data, selectedCategories, onCategoryToggle]);
 
   return (
