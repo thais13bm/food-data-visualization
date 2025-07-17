@@ -175,7 +175,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
                         title: "Category",
                       },
                       { field: "key", type: "nominal", title: "Metric" },
-                      { field: "value", type: "quantitative", title: "Value" },
+                      { field: "value", type: "quantitative", title: "Value" ,format: ".1f", },
                     ],
                   },
                 },

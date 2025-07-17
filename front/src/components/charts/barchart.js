@@ -49,56 +49,43 @@ export default function BarChart({
       .filter((d) => d[xField] && !isNaN(d[xField]))
       .filter((d) => activeCategories.includes(d.RecipeCategory));
 
-    const top = [...filtered]
-      .sort((a, b) =>
-        ascending ? a[xField] - b[xField] : b[xField] - a[xField]
-      )
-      .slice(0, topN)
-      .map((d) => {
-        let imageUrl = "";
+    // 1. Calcular média de xField por categoria
+    const categoryMeansAll = Object.entries(
+      filtered.reduce((acc, curr) => {
+        const cat = curr.RecipeCategory;
+        const value = Number(curr[xField]);
+        if (isNaN(value)) return acc;
 
-        // Temporário - depois a gente pode ajustar para uma imagem por receita no csv, pra evitar esse replace
-        try {
-          const parsed = JSON.parse(d.Images.replace(/'/g, '"'));
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            imageUrl = parsed[0];
-          } else if (typeof parsed === "string") {
-            imageUrl = parsed;
-          }
-        } catch (err) {
-          imageUrl = d.Images.replace(/['"]/g, "");
-        }
+        if (!acc[cat]) acc[cat] = { sum: 0, count: 0 };
+        acc[cat].sum += value;
+        acc[cat].count += 1;
+        return acc;
+      }, {})
+    ).map(([category, { sum, count }]) => ({
+      RecipeCategory: category,
+      mean: sum / count,
+    }));
 
-        return {
-          ...d,
-          image: imageUrl,
-        };
-      });
+    // 2. Ordenar categorias pelas médias
+    const categoryMeansSorted = [...categoryMeansAll].sort((a, b) =>
+      ascending ? a.mean - b.mean : b.mean - a.mean
+    );
+
+    // 3. Selecionar top N categorias
+    const topCategories = categoryMeansSorted.slice(0, topN);
+
+
 
     const spec = vl
       .markBar()
-      .data(top)
+      .data(topCategories)
       .encode(
-        vl.x().fieldQ(xField).title(xField),
-        vl
-          .y()
-          .fieldN("Name")
-          .sort(ascending ? "x" : "-x")
-          .title("Recipe"),
-
-        vl.color().fieldN("RecipeCategory").title("Category"),
+        vl.x().fieldQ("mean").title(`Mean ${xField}`),
+        vl.y().fieldN("RecipeCategory").sort(ascending ? "x" : "-x").title("Category"),
+        vl.color().fieldN("RecipeCategory").legend(null), // remove legenda redundante
         vl.tooltip([
-          { field: "Name", title: "Recipe" },
           { field: "RecipeCategory", title: "Category" },
-          { field: "AuthorName", title: "Author" },
-          { field: xField, title: xField },
-          {
-            field: "DatePublished",
-            type: "temporal",
-            title: "Published",
-            format: "%d/%m/%Y",
-          },
-          { field: "image" },
+          { field: "mean", title: `Mean ${xField}`, format: ".1f", },
         ])
       )
       .width(containerWidth)
@@ -108,6 +95,7 @@ export default function BarChart({
         padding: { left: 20, right: 10, bottom: 10, top: 10 },
       })
       .toSpec();
+
 
     embed(chartRef.current, spec, {
       actions: false,

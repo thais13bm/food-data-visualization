@@ -59,67 +59,62 @@ export default function ScatterPlot({
       .filter((d) => d[yField] !== undefined && !isNaN(d[yField]))
       .filter((d) => activeCategories.includes(d.RecipeCategory));
 
-    const top = [...filtered]
-      .sort((a, b) => b[xField] - a[xField])
-      .map((d) => {
-        let imageUrl = "";
-        try {
-          const parsed = JSON.parse(d.Images.replace(/'/g, '"'));
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            imageUrl = parsed[0];
-          } else if (typeof parsed === "string") {
-            imageUrl = parsed;
-          }
-        } catch (err) {
-          imageUrl = d.Images.replace(/['"]/g, "");
-        }
+    const categoryAgg = Object.entries(
+      filtered.reduce((acc, curr) => {
+        const cat = curr.RecipeCategory;
+        const xVal = Number(curr[xField]);
+        const yVal = Number(curr[yField]);
+        if (isNaN(xVal) || isNaN(yVal)) return acc;
 
-        return {
-          ...d,
-          image: imageUrl,
-        };
-      });
+        if (!acc[cat]) {
+          acc[cat] = { xSum: 0, ySum: 0, count: 0 };
+        }
+        acc[cat].xSum += xVal;
+        acc[cat].ySum += yVal;
+        acc[cat].count += 1;
+
+        return acc;
+      }, {})
+    ).map(([category, { xSum, ySum, count }]) => ({
+      RecipeCategory: category,
+      [`mean_${xField}`]: xSum / count,
+      [`mean_${yField}`]: ySum / count,
+      Count: count,
+    }));
+
 
     const selection = vl.selectInterval().name("brush");
 
     const spec = {
-      data: { values: top },
+      data: { values: categoryAgg },
       width: containerWidth,
       height: height,
       mark: "point",
-      params: [
-        {
-          name: "brush",
-          select: { type: "interval" },
-        },
-      ],
       encoding: {
-        x: { field: xField, type: "quantitative", title: xField },
-        y: { field: yField, type: "quantitative", title: yField },
+        x: {
+          field: `mean_${xField}`,
+          type: "quantitative",
+          title: `Mean ${xField}`,
+        },
+        y: {
+          field: `mean_${yField}`,
+          type: "quantitative",
+          title: `Mean ${yField}`,
+        },
         color: {
-          condition: {
-            selection: "brush",
-            field: "RecipeCategory",
-            type: "nominal",
-          },
-          value: "lightgray",
+          field: "RecipeCategory",
+          type: "nominal",
+          legend: { title: "Category" },
         },
         tooltip: [
-          { field: "Name", title: "Recipe" },
           { field: "RecipeCategory", title: "Category" },
-          { field: "AuthorName", title: "Author" },
-          { field: xField, title: xField },
-          { field: yField, title: yField },
-          {
-            field: "DatePublished",
-            type: "temporal",
-            title: "Published",
-            format: "%d/%m/%Y",
-          },
-          { field: "image" },
+          { field: `mean_${xField}`, title: `Mean ${xField}`,format: ".1f" },
+          { field: `mean_${yField}`, title: `Mean ${yField}`,format: ".1f" },
+          { field: "Count", title: "Number of Recipes" },
         ],
       },
     };
+
 
     embed(chartRef.current, spec, {
       actions: false,
