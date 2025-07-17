@@ -63,6 +63,13 @@ export default function RecipeDashboard({
           },
           width: containerWidth / 3 - 15,
           height: 250,
+          params: [
+            {
+              name: "selectPoint",
+              select: { type: "point", fields: ["Name"] },
+            },
+          ],
+
           mark: "bar",
           encoding: {
             y: {
@@ -76,7 +83,14 @@ export default function RecipeDashboard({
               type: "quantitative",
               title: xFieldBarChart,
             },
-            color: { field: "RecipeCategory", type: "nominal" },
+            color: {
+              condition: {
+                selection: "selectPoint",
+                field: "RecipeCategory",
+                type: "nominal",
+              },
+              value: "#ccc",
+            },
             tooltip: [
               { field: "Name" },
               { field: "RecipeCategory" },
@@ -91,6 +105,7 @@ export default function RecipeDashboard({
           data: { values: filtered },
           width: containerWidth / 3 - 15,
           height: 250,
+          transform: [{ filter: { selection: "selectPoint" } }],
           params: [
             { name: "brush", select: { type: "interval", empty: "none" } },
           ],
@@ -119,7 +134,16 @@ export default function RecipeDashboard({
           title: "Parallel Coordinates",
           data: { values: filtered },
           transform: [
+            {
+              calculate:
+                "length(data('selectPoint_store')) > 0 || length(data('brush_store')) > 0 ? true : false",
+              as: "hasSelection",
+            },
+            {
+              filter: "datum.hasSelection",
+            },
             { filter: { selection: "brush" } },
+            { filter: { selection: "selectPoint" } },
             { window: [{ op: "count", as: "index" }] },
             {
               fold: [
@@ -149,12 +173,13 @@ export default function RecipeDashboard({
                         .filter((v) => !isNaN(v));
                       const min = d3.min(values) ?? 0;
                       const max = d3.max(values) ?? 0;
-                      return { key: m, min, max };
+                      const mid = (min + max) / 2;
+                      return { key: m, min, max, mid };
                     });
                   })(),
                 },
                 key: "key",
-                fields: ["min", "max"],
+                fields: ["min", "max", "mid"],
               },
             },
             {
@@ -163,7 +188,7 @@ export default function RecipeDashboard({
               as: "norm_val",
             },
           ],
-          width: containerWidth / 3 - 15,
+          width: containerWidth / 3 + 30,
           height: 250,
           layer: [
             // Linhas principais
@@ -204,40 +229,28 @@ export default function RecipeDashboard({
                 ],
               },
             },
-
-            // Label que aparece quando norm_val === 0 → corresponde ao MÍNIMO real
-            {
-              transform: [{ filter: "datum.norm_val === 0" }],
-              mark: {
-                type: "text",
-                align: "left",
-                dx: 4,
-                dy: -6,
-                fontSize: 10,
-              },
+            ...[0, 0.5, 1].map((pos) => ({
               encoding: {
-                x: { field: "key", type: "nominal" },
-                y: { field: "norm_val", type: "quantitative" },
-                text: { field: "min", type: "quantitative", format: ".1f" },
+                x: { type: "nominal", field: "key" },
+                y: { value: 250 * pos },
               },
-            },
-
-            // Label que aparece quando norm_val === 1 → corresponde ao MÁXIMO real
-            {
-              transform: [{ filter: "datum.norm_val === 1" }],
-              mark: {
-                type: "text",
-                align: "left",
-                dx: 4,
-                dy: 6,
-                fontSize: 10,
-              },
-              encoding: {
-                x: { field: "key", type: "nominal" },
-                y: { field: "norm_val", type: "quantitative" },
-                text: { field: "max", type: "quantitative", format: ".1f" },
-              },
-            },
+              layer: [
+                {
+                  mark: { type: "text", style: "label", align: "left", dx: 4 },
+                  encoding: {
+                    text:
+                      pos === 0
+                        ? { field: "max", type: "quantitative", format: ".1f" }
+                        : pos === 0.5
+                        ? { field: "mid", type: "quantitative", format: ".1f" }
+                        : { value: "0" },
+                  },
+                },
+                {
+                  mark: { type: "tick", style: "tick", size: 8, color: "#ccc" },
+                },
+              ],
+            })),
           ],
         },
       ],
