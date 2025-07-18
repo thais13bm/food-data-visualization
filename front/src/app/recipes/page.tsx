@@ -134,7 +134,7 @@ export default function RecipesPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center">
-        <LoadingOverlay variant="neutral" fullscreen={false} />
+        <LoadingOverlay variant="muted" />
       </div>
     );
   }

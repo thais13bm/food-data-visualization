@@ -4,13 +4,20 @@ import ImageCarousel from "@/components/image_slide";
 import useSWR from "swr";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { LoadingOverlay } from "@/components/common/loading-overlay";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Home() {
   const { data, error, isLoading } = useSWR("/api/recipes", fetcher);
 
-  if (isLoading) return <p className="p-6 text-gray-700">Loading recipes...</p>;
+  if (isLoading)
+    return (
+      <div className="fixed inset-0 z-50">
+        <LoadingOverlay message="Loading data..." />
+      </div>
+    );
+
   if (error) return <p className="p-6 text-red-500">Error loading data!</p>;
 
   return (

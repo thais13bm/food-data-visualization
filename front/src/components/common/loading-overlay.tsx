@@ -1,15 +1,20 @@
 type Props = {
   message?: string;
-  variant?: string;
+  variant?: string; // "neutral" | "muted" | undefined
 };
 
 export function LoadingOverlay({ message, variant }: Props) {
   return (
     <div
       style={{
-        backgroundColor: variant === "neutral" ? "white" : "#f3f4f6",
+        backgroundColor:
+          variant === "neutral"
+            ? "white"
+            : variant === "muted"
+            ? "bg-gray-50"
+            : "#f3f4f6",
       }}
-      className="w-full h-full flex items-center justify-center bg-gray-100"
+      className="w-full h-full flex items-center justify-center"
     >
       <div className="text-center">
         <svg
@@ -33,7 +38,7 @@ export function LoadingOverlay({ message, variant }: Props) {
           ></path>
         </svg>
         <p className="text-gray-700 font-semibold text-lg">
-          {!message ? "Carregando..." : message}
+          {message || "Loading..."}
         </p>
       </div>
     </div>

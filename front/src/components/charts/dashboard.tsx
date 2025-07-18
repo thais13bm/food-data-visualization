@@ -239,7 +239,17 @@ export default function RecipeDashboard({
                   scale: { domain: [0, 1] },
                   axis: null,
                 },
-                color: { field: "RecipeCategory", type: "nominal" },
+                color: {
+                  field: "RecipeCategory",
+                  type: "nominal",
+                  legend: {
+                    orient: "bottom",
+                    direction: "horizontal",
+                    title: "Category",
+                    padding: 5,
+                  },
+                },
+
                 detail: { field: "index" },
               },
             },
