@@ -330,15 +330,30 @@ export default function RecipesPage() {
                   max={50}
                   value={topN}
                   onChange={(e) => setTopN(Number(e.target.value))}
-                  className="input w-[100px] h-9 text-sm border px-2 rounded"
+                  className="input w-[100px] h-9 text-sm border px-2 rounded bg-white"
                 />
 
                 {/* Asc/Desc Toggle */}
-                <button
+                {/* <button
                   onClick={() => setAscending((prev) => !prev)}
-                  className="px-3 py-1 border rounded text-sm"
+                  className="px-3 py-1 border rounded text-sm bg-white"
                 >
                   {ascending ? "Asc" : "Desc"}
+                </button> */}
+                <button
+                  onClick={() => setAscending((prev) => !prev)}
+                  className="w-9 h-9 border rounded flex items-center justify-center transition-colors bg-white"
+                  title={
+                    ascending
+                      ? "Sort ascending (smallest on top)"
+                      : "Sort descending (largest on top)"
+                  }
+                >
+                  {ascending ? (
+                    <ArrowDownIcon className="w-5 h-5" />
+                  ) : (
+                    <ArrowUpIcon className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
