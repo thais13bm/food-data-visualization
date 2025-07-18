@@ -59,6 +59,19 @@ export default function ScatterPlot({
       .filter((d) => d[yField] !== undefined && !isNaN(d[yField]))
       .filter((d) => activeCategories.includes(d.RecipeCategory));
 
+    const imageMap = {};
+    for (const recipe of filtered) {
+      if (!imageMap[recipe.RecipeCategory]) {
+        try {
+          const parsed = JSON.parse(recipe.Images.replace(/'/g, '"'));
+          const imageUrl = Array.isArray(parsed) ? parsed[0] : parsed;
+          if (imageUrl) imageMap[recipe.RecipeCategory] = imageUrl;
+        } catch {
+          imageMap[recipe.RecipeCategory] = recipe.Images.replace(/['"]/g, "");
+        }
+      }
+    }
+
     const categoryAgg = Object.entries(
       filtered.reduce((acc, curr) => {
         const cat = curr.RecipeCategory;
@@ -80,10 +93,8 @@ export default function ScatterPlot({
       [`mean_${xField}`]: xSum / count,
       [`mean_${yField}`]: ySum / count,
       Count: count,
+      image: imageMap[category] || "",
     }));
-
-
-    const selection = vl.selectInterval().name("brush");
 
     const spec = {
       data: { values: categoryAgg },
@@ -108,13 +119,13 @@ export default function ScatterPlot({
         },
         tooltip: [
           { field: "RecipeCategory", title: "Category" },
-          { field: `mean_${xField}`, title: `Mean ${xField}`,format: ".1f" },
-          { field: `mean_${yField}`, title: `Mean ${yField}`,format: ".1f" },
+          { field: `mean_${xField}`, title: `Mean ${xField}`, format: ".1f" },
+          { field: `mean_${yField}`, title: `Mean ${yField}`, format: ".1f" },
           { field: "Count", title: "Number of Recipes" },
+          { field: "image" },
         ],
       },
     };
-
 
     embed(chartRef.current, spec, {
       actions: false,

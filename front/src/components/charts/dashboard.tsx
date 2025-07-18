@@ -243,7 +243,7 @@ export default function RecipeDashboard({
                   field: "RecipeCategory",
                   type: "nominal",
                   legend: {
-                    orient: "bottom",
+                    orient: "top",
                     direction: "horizontal",
                     title: "Category",
                     padding: 5,

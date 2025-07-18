@@ -50,12 +50,27 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
       .filter((d) => selected.includes(d.RecipeCategory))
       .filter((d) => metrics.every((m) => d[m] !== undefined && !isNaN(+d[m])));
 
+    const imageMap = {};
+    for (const recipe of filtered) {
+      if (!imageMap[recipe.RecipeCategory]) {
+        try {
+          const parsed = JSON.parse(recipe.Images.replace(/'/g, '"'));
+          const imageUrl = Array.isArray(parsed) ? parsed[0] : parsed;
+          if (imageUrl) imageMap[recipe.RecipeCategory] = imageUrl;
+        } catch {
+          imageMap[recipe.RecipeCategory] = recipe.Images.replace(/['"]/g, "");
+        }
+      }
+    }
+
     const averages = selected.map((category) => {
       const items = filtered.filter((d) => d.RecipeCategory === category);
       const entry = { RecipeCategory: category };
       metrics.forEach((m) => {
         entry[m] = d3.mean(items, (d) => +d[m]) || 0;
       });
+      entry.Count = items.length;
+      entry.image = imageMap[category] || "";
       return entry;
     });
 
@@ -175,7 +190,18 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
                         title: "Category",
                       },
                       { field: "key", type: "nominal", title: "Metric" },
-                      { field: "value", type: "quantitative", title: "Value" ,format: ".1f", },
+                      {
+                        field: "value",
+                        type: "quantitative",
+                        title: "Value",
+                        format: ".1f",
+                      },
+                      {
+                        field: "Count",
+                        type: "quantitative",
+                        title: "Number of Recipes",
+                      },
+                      { field: "image"},
                     ],
                   },
                 },

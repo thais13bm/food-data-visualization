@@ -67,7 +67,7 @@ export default function RecipesPage() {
   ]);
   const [open, setOpen] = useState(false);
 
-  const [topN, setTopN] = useState(10);
+  const [topN, setTopN] = useState(2);
   const [xFieldBarChart, setXFieldBarChart] = useState("Calories (kcal)");
   const [xFieldScatterPlot, setXFieldScatterPlot] = useState("Calories (kcal)");
   const [yField, setYField] = useState("FatContent (g)");
