@@ -15,13 +15,24 @@ export default function BarChart({
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const height = topN * 35 * 5;
   const [chartLoading, setChartLoading] = useState(true);
+
+  const containerMaxHeight = 400; // altura fixa do "card"
+  const minBarHeight = 50; // altura mínima que uma barra deve ter
+
+  // Calcula altura do gráfico baseado no número de barras e mantendo altura mínima da barra
+  const calculatedBarHeight =
+    topN > 0 ? containerMaxHeight / topN : containerMaxHeight;
+  const barHeight =
+    calculatedBarHeight < minBarHeight ? minBarHeight : calculatedBarHeight;
+
+  // Se a barra mínima for atingida, aumentamos a altura total do gráfico
+  const chartHeight = barHeight * topN;
 
   useEffect(() => {
     const resize = () => {
       if (containerRef.current) {
-        const width = containerRef.current.getBoundingClientRect().width;
+        const width = containerRef.current.getBoundingClientRect().width - 30;
         setContainerWidth(width);
       }
     };
@@ -73,7 +84,6 @@ export default function BarChart({
       }
     }
 
-    // 1. Calcular média de xField por categoria
     const categoryMeansAll = Object.entries(
       filtered.reduce((acc, curr) => {
         const cat = curr.RecipeCategory;
@@ -92,16 +102,14 @@ export default function BarChart({
       image: bestRecipePerCategory[category]?.image || "",
     }));
 
-    // 2. Ordenar categorias pelas médias
     const categoryMeansSorted = [...categoryMeansAll].sort((a, b) =>
       ascending ? a.mean - b.mean : b.mean - a.mean
     );
 
-    // 3. Selecionar top N categorias
     const topCategories = categoryMeansSorted.slice(0, topN);
 
     const spec = vl
-      .markBar()
+      .markBar({ size: barHeight * 0.8 }) // Controla a altura da barra (80% do espaço da barra)
       .data(topCategories)
       .encode(
         vl.x().fieldQ("mean").title(`Mean ${xField}`),
@@ -119,10 +127,11 @@ export default function BarChart({
         ])
       )
       .width(containerWidth)
-      .height(height)
+      .height(chartHeight)
       .autosize({ type: "fit", contains: "padding" })
       .config({
         padding: { left: 20, right: 10, bottom: 10, top: 10 },
+        bar: { continuousBandSize: barHeight * 0.8 }, // Define a largura da banda vertical
       })
       .toSpec();
 
@@ -136,13 +145,21 @@ export default function BarChart({
   }, [data, selectedCategories, topN, xField, containerWidth]);
 
   return (
-    <div ref={containerRef} className="w-full relative" style={{ height }}>
+    <div
+      ref={containerRef}
+      className="w-full relative overflow-y-auto hide-scrollbar"
+      style={{ maxHeight: containerMaxHeight }}
+    >
       {chartLoading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
           <LoadingOverlay variant="neutral" />
         </div>
       )}
-      <div ref={chartRef} className="w-full h-full" />
+      <div
+        ref={chartRef}
+        className="w-full"
+        style={{ height: chartHeight, minHeight: chartHeight }}
+      />
     </div>
   );
 }
