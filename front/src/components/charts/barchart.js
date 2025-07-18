@@ -147,7 +147,7 @@ export default function BarChart({
   return (
     <div
       ref={containerRef}
-      className="w-full relative overflow-y-auto hide-scrollbar"
+      className="w-full relative overflow-y-auto"
       style={{ maxHeight: containerMaxHeight }}
     >
       {chartLoading && (
