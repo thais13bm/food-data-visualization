@@ -333,13 +333,7 @@ export default function RecipesPage() {
                   className="input w-[100px] h-9 text-sm border px-2 rounded bg-white"
                 />
 
-                {/* Asc/Desc Toggle */}
-                {/* <button
-                  onClick={() => setAscending((prev) => !prev)}
-                  className="px-3 py-1 border rounded text-sm bg-white"
-                >
-                  {ascending ? "Asc" : "Desc"}
-                </button> */}
+                
                 <button
                   onClick={() => setAscending((prev) => !prev)}
                   className="w-9 h-9 border rounded flex items-center justify-center transition-colors bg-white"
@@ -364,6 +358,7 @@ export default function RecipesPage() {
               <div className="flex flex-wrap gap-4">
                 {/* X Field */}
                 <Select value={xFieldScatter} onValueChange={setXFieldScatter}>
+                  <label className="text-sm font-medium text-muted-foreground">X Axis</label>
                   <SelectTrigger className="w-[220px] h-9 text-sm">
                     <SelectValue placeholder="X Axis" />
                   </SelectTrigger>
@@ -417,6 +412,7 @@ export default function RecipesPage() {
 
                 {/* Y Field */}
                 <Select value={yFieldScatter} onValueChange={setYFieldScatter}>
+                  <label className="text-sm font-medium text-muted-foreground">Y Axis</label>
                   <SelectTrigger className="w-[220px] h-9 text-sm">
                     <SelectValue placeholder="Y Axis" />
                   </SelectTrigger>
