@@ -90,7 +90,7 @@ export default function RecipeDashboard({
             y: {
               field: "Name",
               type: "nominal",
-              sort: "-x",
+              sort: ascending ? "x" : "-x",
               title: "Recipe",
             },
             x: {
