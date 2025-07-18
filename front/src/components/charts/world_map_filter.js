@@ -26,7 +26,7 @@ export default function WorldMapFilter({
     }));
 
     const spec = {
-      width: 1400,
+      width: 900,
       height: 400,
       data: {
         url: "https://vega.github.io/vega-datasets/data/world-110m.json",
@@ -69,7 +69,6 @@ export default function WorldMapFilter({
       mark: "geoshape",
       encoding: {
         color: {
-
           condition: [
             {
               test: "datum.hasRecipe && datum.isSelected",
@@ -80,32 +79,34 @@ export default function WorldMapFilter({
           field: "hasRecipe",
           type: "nominal",
           scale: { domain: [true, null], range: ["#10b981", "#e5e7eb"] },
-          legend: {title: "Has recipes?",
-                  orient: "left",      // ou "right", "left", etc.
-                  labelFontSize: 16,     // aumenta o tamanho da fonte das labels
-                  titleFontSize: 18,     // aumenta o tamanho da fonte do título
-                  //symbolSize: 20,       // aumenta o tamanho dos quadrados coloridos
-                  //padding: 10,
-                  //offset: 10,
-                  // 
-                  },
+          legend: {
+            title: "Has recipes?",
+            orient: "left", // ou "right", "left", etc.
+            labelFontSize: 16, // aumenta o tamanho da fonte das labels
+            titleFontSize: 18, // aumenta o tamanho da fonte do título
+            //symbolSize: 20,       // aumenta o tamanho dos quadrados coloridos
+            //padding: 10,
+            //offset: 10,
+            //
+          },
         },
         tooltip: { field: "name", type: "nominal" },
         stroke: {
-          condition: { 
+          condition: {
             selection: "selectedCountry",
-             value: "black" },
+            value: "black",
+          },
           value: null, // nenhum contorno quando não selecionado
         },
         strokeWidth: {
-          condition: { 
+          condition: {
             selection: "selectedCountry",
-             value: 2 },
+            value: 2,
+          },
           value: 0.5, // borda fina padrão
         },
-
       },
-      };
+    };
 
     embed(ref.current, spec, { actions: false, renderer: "svg" }).then(
       (result) => {
@@ -148,14 +149,10 @@ export default function WorldMapFilter({
   }, [selectedCategories, filterMode]);
 
   return (
-    <div className="w-full flex justify-center mb-4">
-      
-        {/* Legenda à esquerda */}
-        
-
-        {/* Mapa mais próximo e centrado */}
-        <div className="pl-4 pr-2 py-2 flex-1 h-full" ref={ref} />
-      
+    <div className="w-full flex justify-center mb-4 px-4">
+      <div className="bg-white rounded-xl shadow-md p-4 w-full max-w-6xl">
+        <div ref={ref} className="w-full h-full" />
+      </div>
     </div>
   );
 }
