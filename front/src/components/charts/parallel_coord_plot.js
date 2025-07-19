@@ -10,7 +10,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
   const chartRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [chartLoading, setChartLoading] = useState(true);
-  const height = 270;
+  const height = 200;
 
   const metrics = [
     "Calories (kcal)",
@@ -23,7 +23,9 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
   useEffect(() => {
     const resize = () => {
       if (containerRef.current) {
-        setContainerWidth(containerRef.current.getBoundingClientRect().width);
+        setContainerWidth(
+          containerRef.current.getBoundingClientRect().width - 10
+        );
       }
     };
     resize();
@@ -139,8 +141,8 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
                 x: {
                   field: "key",
                   axis: {
-                    labelFontSize: 14,
-                    labelAngle: 0,
+                    labelFontSize: 10,
+                    labelAngle: 40,
                     domain: false,
                     title: null,
                   },
@@ -251,7 +253,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
           <LoadingOverlay variant="neutral" />
         </div>
       )}
-      <div ref={chartRef} className="w-full" style={{ minHeight: 350 }} />
+      <div ref={chartRef} className="w-full" style={{ minHeight: 200 }} />
     </div>
   );
 }

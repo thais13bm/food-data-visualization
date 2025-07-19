@@ -166,7 +166,7 @@ export default function RecipesPage() {
   if (error) return <p>Error loading data</p>;
   return (
     <>
-      <div className="px-4 md:px-8 pb-6 min-h-screen mb-4">
+      <div className="px-4 md:px-8 min-h-screen mb-4">
         <div className="mb-6">
           <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
             Now analyze general trends!
@@ -175,7 +175,7 @@ export default function RecipesPage() {
             Recipes aggregated per category, and other insights!
           </p>
         </div>
-        <div className="flex h-screen p-4 gap-4">
+        <div className="flex p-4 gap-4">
           <div className="w-3/5 flex flex-col gap-4">
             <div className="flex-1 ">
               <div className="mb-4 w-full max-w-[300px]">
@@ -327,7 +327,7 @@ export default function RecipesPage() {
                 <CardHeader className="text-center">
                   <CardTitle>BarChart</CardTitle>
                 </CardHeader>
-                <div className="pl-4 pb-4 flex flex-wrap items-center gap-6">
+                <div className="pl-4 pb-4 flex items-center gap-6">
                   {/* Campo X Field */}
                   <div className="w-full max-w-[200px]">
                     <label className="text-base font-semibold">X Field</label>
