@@ -236,7 +236,7 @@ export default function NetworkChart({ data, selectedCategories }) {
 
   // 5. Construção dos nós e links
   const nodes = [
-    ...topCategories.map(c => ({ id: c, group: "category" })),
+    ...topCategories.map(c => ({ id: c, group: c })),
     ...topIngredients.map(i => ({ id: i, group: "ingredient" })),
   ];
 
