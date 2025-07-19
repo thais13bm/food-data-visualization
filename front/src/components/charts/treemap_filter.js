@@ -3,35 +3,28 @@
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-
-
 function LegendItem({ color, label }) {
   return (
     <div className="flex items-center gap-2">
-      <div 
-        style={{ 
-          width: 20, 
-          height: 20, 
-          backgroundColor: color, 
+      <div
+        style={{
+          width: 20,
+          height: 20,
+          backgroundColor: color,
           borderRadius: 3,
           border: "1px solid #ccc",
-        }} 
+        }}
       />
       <span>{label}</span>
     </div>
   );
 }
 
-
-
 export default function TreemapFilter({
   data,
   selectedCategories,
   onCategoryToggle,
 }) {
-
-
-
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -59,7 +52,6 @@ export default function TreemapFilter({
     ];
 
     const total = d3.sum(categories, (d) => d.value);
-
 
     // Adiciona a categoria "Others" como um nó simples
     if (rest.length > 0) {
@@ -115,17 +107,17 @@ export default function TreemapFilter({
           );
           return someSelected ? "#065f46" : "#10b981 ";
         }
-        return selectedCategories.includes(d.data.name) ? "#065f46" : "#10b981 ";
+        return selectedCategories.includes(d.data.name)
+          ? "#065f46"
+          : "#10b981 ";
       })
       .attr("stroke", "#fff")
       .attr("width", (d) => d.x1 - d.x0)
       .attr("height", (d) => d.y1 - d.y0);
-    nodes
-      .append("title")
-      .text((d) => {
-        const pct = ((d.value / total) * 100).toFixed(1);
-        return `${d.data.name}: ${pct}%`;
-      });  
+    nodes.append("title").text((d) => {
+      const pct = ((d.value / total) * 100).toFixed(1);
+      return `${d.data.name}: ${pct}%`;
+    });
 
     nodes
       .append("text")
@@ -136,17 +128,11 @@ export default function TreemapFilter({
       .text((d) =>
         d.data.name.length > 18 ? d.data.name.slice(0, 15) + "…" : d.data.name
       );
-
-     
-
   }, [data, selectedCategories, onCategoryToggle]);
 
   return (
     <div className="w-full flex justify-center mb-4">
-      
-        
-        <div ref={containerRef} />
-      
+      <div ref={containerRef} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import embed from "vega-embed";
 import { countryIdToName } from "@/utils/iso_to_country";
 
@@ -13,8 +13,27 @@ export default function WorldMapFilter({
   setSelectedCountryIds,
 }) {
   const ref = useRef(null);
+  const [containerWidth, setContainerWidth] = useState(700);
+
+  // Observa mudanças no tamanho do container do gráfico
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const ro = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const w = entry.contentRect.width;
+        setContainerWidth(w - 300);
+      }
+    });
+
+    ro.observe(ref.current.parentElement); // observa o container pai, que controla a largura
+
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
+    if (!containerWidth) return;
+
     const values = countriesWithRecipes.map((id) => ({
       id,
       hasRecipe: true,
@@ -25,9 +44,12 @@ export default function WorldMapFilter({
       name,
     }));
 
+    const width = containerWidth;
+    const height = 400;
+
     const spec = {
-      width: 900,
-      height: 400,
+      width,
+      height,
       data: {
         url: "https://vega.github.io/vega-datasets/data/world-110m.json",
         format: { type: "topojson", feature: "countries" },
@@ -55,6 +77,14 @@ export default function WorldMapFilter({
           )}], datum.id) >= 0`,
           as: "isSelected",
         },
+        {
+          calculate: `
+      datum.hasRecipe 
+        ? (datum.isSelected ? "Selected with recipe" : "Has recipe") 
+        : "Don't have recipe"
+    `,
+          as: "recipeStatus",
+        },
       ],
       projection: { type: "equirectangular" },
       selection: {
@@ -69,25 +99,17 @@ export default function WorldMapFilter({
       mark: "geoshape",
       encoding: {
         color: {
-          condition: [
-            {
-              test: "datum.hasRecipe && datum.isSelected",
-              value: "#065f46",
-            },
-          ],
-
-          field: "hasRecipe",
+          field: "recipeStatus",
           type: "nominal",
-          scale: { domain: [true, null], range: ["#10b981", "#e5e7eb"] },
+          scale: {
+            domain: ["Selected with recipe", "Has recipe", "Don't have recipe"],
+            range: ["#065f46", "#10b981", "#e5e7eb"],
+          },
           legend: {
-            title: "Has recipes?",
-            orient: "left", // ou "right", "left", etc.
-            labelFontSize: 16, // aumenta o tamanho da fonte das labels
-            titleFontSize: 18, // aumenta o tamanho da fonte do título
-            //symbolSize: 20,       // aumenta o tamanho dos quadrados coloridos
-            //padding: 10,
-            //offset: 10,
-            //
+            title: "Status",
+            orient: "left",
+            labelFontSize: 16,
+            titleFontSize: 18,
           },
         },
         tooltip: { field: "name", type: "nominal" },
@@ -96,17 +118,20 @@ export default function WorldMapFilter({
             selection: "selectedCountry",
             value: "black",
           },
-          value: null, // nenhum contorno quando não selecionado
+          value: null,
         },
         strokeWidth: {
           condition: {
             selection: "selectedCountry",
             value: 2,
           },
-          value: 0.5, // borda fina padrão
+          value: 0.5,
         },
       },
     };
+
+    // Limpa antes de renderizar (para evitar sobreposição)
+    ref.current.innerHTML = "";
 
     embed(ref.current, spec, { actions: false, renderer: "svg" }).then(
       (result) => {
@@ -129,7 +154,12 @@ export default function WorldMapFilter({
         });
       }
     );
-  }, [countriesWithRecipes, selectedCountryIds, onCountryToggle]);
+  }, [
+    countriesWithRecipes,
+    selectedCountryIds,
+    onCountryToggle,
+    containerWidth,
+  ]);
 
   useEffect(() => {
     if (filterMode !== "multiselect") return;
@@ -150,7 +180,7 @@ export default function WorldMapFilter({
 
   return (
     <div className="w-full flex justify-center mb-4 px-4">
-      <div className="bg-white rounded-xl shadow-md p-4 w-full max-w-6xl">
+      <div className="bg-white rounded-xl shadow-md p-4 w-full">
         <div ref={ref} className="w-full h-full" />
       </div>
     </div>
