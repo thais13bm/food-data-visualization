@@ -10,7 +10,6 @@ export default function ScatterPlot({
   selectedCategories,
   xField,
   yField,
-  onBrushChange,
 }) {
   const containerRef = useRef(null);
   const chartRef = useRef(null);

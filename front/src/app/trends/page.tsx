@@ -532,7 +532,6 @@ export default function RecipesPage() {
                 selectedCategories={selectedCategories.map((c) => c.name)}
                 xField={xFieldScatterPlot}
                 yField={yField}
-                onBrushChange={(brushed) => setBrushedData(brushed)}
               />
             </CardContent>
           </Card>
