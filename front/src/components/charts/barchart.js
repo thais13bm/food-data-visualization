@@ -17,8 +17,8 @@ export default function BarChart({
   const [containerWidth, setContainerWidth] = useState(0);
   const [chartLoading, setChartLoading] = useState(true);
 
-  const containerMaxHeight = 400; // altura fixa do "card"
-  const minBarHeight = 50; // altura mínima que uma barra deve ter
+  const containerMaxHeight = 350; // altura fixa do "card"
+  const minBarHeight = 40; // altura mínima que uma barra deve ter
 
   // Calcula altura do gráfico baseado no número de barras e mantendo altura mínima da barra
   const calculatedBarHeight =

@@ -10,7 +10,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
   const chartRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [chartLoading, setChartLoading] = useState(true);
-  const height = 300;
+  const height = 270;
 
   const metrics = [
     "Calories (kcal)",
@@ -201,7 +201,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
                         type: "quantitative",
                         title: "Number of Recipes",
                       },
-                      { field: "image"},
+                      { field: "image" },
                     ],
                   },
                 },
@@ -245,13 +245,13 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
   }, [data, selectedCategories, containerWidth]);
 
   return (
-    <div ref={containerRef} className="w-full relative pt-8" style={{ height }}>
+    <div ref={containerRef} className="w-full h-[350px] relative">
       {chartLoading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
           <LoadingOverlay variant="neutral" />
         </div>
       )}
-      <div ref={chartRef} className="w-full h-full" />
+      <div ref={chartRef} className="w-full" style={{ minHeight: 350 }} />
     </div>
   );
 }

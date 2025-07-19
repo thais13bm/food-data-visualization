@@ -17,7 +17,7 @@ export default function ScatterPlot({
   const [chartLoading, setChartLoading] = useState(true);
 
   const margin = { left: 20, right: 20 };
-  const height = 350;
+  const height = 300;
 
   useEffect(() => {
     console.log("ScatterPlot - primeiro loading");
@@ -136,7 +136,7 @@ export default function ScatterPlot({
   }, [data, selectedCategories, xField, yField, containerWidth]);
 
   return (
-    <div ref={containerRef} className="w-full h-[400px] relative">
+    <div ref={containerRef} className="w-full h-[350px] relative">
       {chartLoading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
           <LoadingOverlay variant="neutral" />
