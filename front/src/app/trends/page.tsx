@@ -175,8 +175,8 @@ export default function RecipesPage() {
             Recipes aggregated per category, and other insights!
           </p>
         </div>
-        <div className="flex p-4 gap-4">
-          <div className="w-3/5 flex flex-col gap-4">
+        <div className="flex justify-center p-4">
+          <div className="w-full flex flex-col gap-4">
             <div className="flex-1 ">
               <div className="mb-4 w-full max-w-[300px]">
                 <label className="text-base font-semibold block mb-1">
@@ -288,41 +288,11 @@ export default function RecipesPage() {
                   }}
                 />
               )}
-            </div>
-            {/* Word Cloud */}
-            <div className="flex-1 ">
-              <Card>
-                <CardHeader className="text-center">
-                  <CardTitle>Word Cloud (Ingredients)</CardTitle>
-                </CardHeader>
-                <CardContent className="w-full min-w-0 overflow-hidden">
-                  <WordCloudChart
-                    data={data}
-                    selectedCategories={selectedCategories.map((c) => c.name)}
-                  />
-                </CardContent>
-              </Card>
-            </div>
 
-            {/* Network Chart */}
-            <div className="flex-1 ">
-              <Card>
-                <CardHeader className="text-center">
-                  <CardTitle>Network chart</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <NetworkChart
-                    data={data}
-                    selectedCategories={selectedCategories.map((c) => c.name)}
-                  />
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          <div className="w-2/5 flex flex-col gap-4">
+              <div className="w-full overflow-x-auto pb-6">
+            <div className="flex flex-row gap-4 min-w-[1200px] px-2">
             {/* Bar Chart */}
-            <div className="flex-1 ">
+            <div >
               <Card>
                 <CardHeader className="text-center">
                   <CardTitle>BarChart</CardTitle>
@@ -596,6 +566,32 @@ export default function RecipesPage() {
               </Card>
             </div>
           </div>
+          </div>  
+
+
+
+
+
+            </div>
+            {/* Word Cloud */}
+            {/* <div className="flex-1 ">
+              <Card>
+                <CardHeader className="text-center">
+                  <CardTitle>Word Cloud (Ingredients)</CardTitle>
+                </CardHeader>
+                <CardContent className="w-full min-w-0 overflow-hidden">
+                  <WordCloudChart
+                    data={data}
+                    selectedCategories={selectedCategories.map((c) => c.name)}
+                  />
+                </CardContent>
+              </Card>
+            </div> */}
+
+            
+          </div>
+
+          
         </div>
       </div>
     </>
