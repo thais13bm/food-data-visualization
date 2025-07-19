@@ -36,7 +36,14 @@ export default function Drawer({ open, onClose }: DrawerProps) {
             onClick={onClose}
             className="hover:text-teal-600"
           >
-            General Trends
+            Category nutrients
+          </Link>
+          <Link
+            href="/ingredients"
+            onClick={onClose}
+            className="hover:text-teal-600"
+          >
+            Ingredients
           </Link>
         </nav>
       </aside>

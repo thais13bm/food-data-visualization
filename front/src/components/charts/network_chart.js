@@ -72,11 +72,11 @@ function ForceGraph(
 
   const simulation = d3
     .forceSimulation(nodes)
-    .force("link", forceLink.distance(40))
-    .force("charge", forceNode.strength(-100))
+    .force("link", forceLink.distance(80))
+    .force("charge", forceNode.strength(-1200))
     .force("collide", d3.forceCollide(10))
-    //.force("x", d3.forceX())
-    //.force("y", d3.forceY()) // evita sobreposição
+    .force("x", d3.forceX())
+    .force("y", d3.forceY()) // evita sobreposição
     //.force("center", d3.forceCenter(width / 2, height / 2)) // centraliza tudo
 
     .on("tick", ticked);
@@ -290,14 +290,20 @@ export default function NetworkChart({ data, selectedCategories }) {
         { nodes, links },
         {
           width: containerWidth,
-          height: 350,
+          height: 700,
           nodeGroup: (d) => d.group,
           nodeGroups: [...categoryGroups], // <-- importante
+          //nodeGroups: categoryGroups,
           colors: d3.schemeTableau10,
           nodeTitle: (d) => d.id,
           linkStrokeWidth: (d) => Math.sqrt(d.value),
-          nodeRadius: 8,
+          nodeRadius: 12,
           linkStrength: (d) => 0.01,
+          forces: [
+            d3.forceManyBody().strength(-700), // mais repulsão
+            d3.forceCenter(containerWidth / 2, 250), // centro
+            d3.forceCollide(0.01), // evita sobreposição
+          ],
         }
       )
     );
@@ -308,8 +314,8 @@ export default function NetworkChart({ data, selectedCategories }) {
   return (
     <div
       ref={containerRef}
-      className="w-full relative"
-      style={{ height: "400px" }}
+      className="w-full h-full relative"
+      style={{ height: "100%" }}
     >
       {chartLoading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
