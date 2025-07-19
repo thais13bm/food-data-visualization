@@ -34,6 +34,13 @@ const ParallelCoordinatesChart = dynamic(
   }
 );
 
+const NetworkChart = dynamic(
+  () => import("@/components/charts/network_chart"),
+  {
+    ssr: false,
+  }
+);
+
 const WorldMapFilter = dynamic(
   () => import("@/components/charts/world_map_filter"),
   {
@@ -546,6 +553,19 @@ export default function RecipesPage() {
               />
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader className="text-center">
+              <CardTitle>Network chart</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <NetworkChart
+                data={data}
+                selectedCategories={selectedCategories.map((c) => c.name)}
+              />
+            </CardContent>
+          </Card>        
+
         </div>
       </div>
     </>
