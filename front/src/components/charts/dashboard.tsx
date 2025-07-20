@@ -125,7 +125,7 @@ export default function RecipeDashboard({
         {
           title: "Scatter Plot",
           data: { values: filteredWithImages },
-          width: containerWidth / 3 - 15 - 100,
+          width: containerWidth / 3 - 15 -100,
           height: 250,
           // transform: [{ filter: { selection: "selectPoint" } }],
           params: [
@@ -217,7 +217,7 @@ export default function RecipeDashboard({
               as: "norm_val",
             },
           ],
-          width: containerWidth / 3 + 30 - 100,
+          width: containerWidth / 3 + 70,
           height: 250,
           layer: [
             // Linhas principais
