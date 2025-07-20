@@ -23,19 +23,9 @@ const BarChart = dynamic(() => import("@/components/charts/barchart"), {
 const ScatterPlot = dynamic(() => import("@/components/charts/scatterplot"), {
   ssr: false,
 });
-const WordCloudChart = dynamic(() => import("@/components/charts/wordcloud"), {
-  ssr: false,
-});
 
 const ParallelCoordinatesChart = dynamic(
   () => import("@/components/charts/parallel_coord_plot"),
-  {
-    ssr: false,
-  }
-);
-
-const NetworkChart = dynamic(
-  () => import("@/components/charts/network_chart"),
   {
     ssr: false,
   }
