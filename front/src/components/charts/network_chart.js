@@ -166,15 +166,13 @@ function ForceGraph(
   if (G && color && nodeGroups) {
     const legend = svg
       .append("g")
-      .attr("transform", `translate(${-width / 2 }, ${-height/1.5 })`);
-      
+      .attr("transform", `translate(${-width / 2}, ${-height / 1.5})`);
+
     const legendItems = nodeGroups.concat("ingredient");
 
     legendItems.forEach((group, i) => {
       const g = legend.append("g").attr("transform", `translate(0, ${i * 20})`);
-      g.append("circle")
-        .attr("r", 8)
-        .attr("fill", color(group));
+      g.append("circle").attr("r", 8).attr("fill", color(group));
       g.append("text")
         .text(group === "ingredient" ? "Ingredient" : group)
         .attr("x", 14)
@@ -191,6 +189,10 @@ export default function NetworkChart({ data, selectedCategories }) {
   const chartRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [chartLoading, setChartLoading] = useState(true);
+  const allCategories = [...new Set(data.map((d) => d.RecipeCategory))].sort();
+  const activeCategories = selectedCategories.includes("All")
+    ? allCategories
+    : selectedCategories;
 
   useEffect(() => {
     const resize = () => {
@@ -212,7 +214,7 @@ export default function NetworkChart({ data, selectedCategories }) {
 
     // 1. Filtra os dados conforme categorias selecionadas e ingredientes válidos
     const filtered = data
-      .filter((d) => selectedCategories.includes(d.RecipeCategory))
+      .filter((d) => activeCategories.includes(d.RecipeCategory))
       .filter((d) => d.RecipeIngredientParts);
 
     // 2. Contagem por categoria

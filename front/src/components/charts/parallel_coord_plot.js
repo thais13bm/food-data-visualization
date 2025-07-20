@@ -160,7 +160,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
                       legend: {
                         title: "Category",
                         orient: "bottom",
-                        symbolLimit: 10,
+                        symbolLimit: 6,
                       },
                     },
                     detail: { field: "index" },

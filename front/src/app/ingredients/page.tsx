@@ -12,16 +12,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 import { LoadingOverlay } from "@/components/common/loading-overlay";
 import { categoryToCountryMap } from "@/utils/category_to_country_map";
 import { countryNameToId } from "@/utils/country_to_iso";
 
-
 const WordCloudChart = dynamic(() => import("@/components/charts/wordcloud"), {
   ssr: false,
 });
-
 
 const NetworkChart = dynamic(
   () => import("@/components/charts/network_chart"),
@@ -63,14 +60,8 @@ export default function IngredientsPage() {
   ]);
   const [open, setOpen] = useState(false);
 
-  const [topN, setTopN] = useState(2);
-  const [xFieldBarChart, setXFieldBarChart] = useState("Calories (kcal)");
-  const [xFieldScatterPlot, setXFieldScatterPlot] = useState("Calories (kcal)");
-  const [yField, setYField] = useState("FatContent (g)");
-  const [ascending, setAscending] = useState(false);
   const [filterMode, setFilterMode] = useState("treemap");
   const [selectedCountryIds, setSelectedCountryIds] = useState<number[]>([]);
-  const [brushedData, setBrushedData] = useState([]);
 
   const countriesWithRecipes = Array.from(
     new Set(
@@ -198,6 +189,7 @@ export default function IngredientsPage() {
                     onRemove={handleRemove}
                     buttonPlaceholder="Select categories"
                     filterPlaceholder="Filter categories..."
+                    onClearAll={() => setSelectedCategories([])}
                   />
                 </div>
               )}
@@ -308,14 +300,9 @@ export default function IngredientsPage() {
                     />
                   </CardContent>
                 </Card>
+              </div>
             </div>
           </div>
-
-
-            
-          </div>
-
-         
         </div>
       </div>
     </>

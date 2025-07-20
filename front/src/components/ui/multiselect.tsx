@@ -30,6 +30,7 @@ interface IMultiselect<T = any> {
   selectedOptions: T[];
   buttonPlaceholder: string;
   filterPlaceholder: string;
+  onClearAll?: () => void;
 }
 
 export function Multiselect<T>({
@@ -46,6 +47,7 @@ export function Multiselect<T>({
   selectedOptions,
   buttonPlaceholder,
   filterPlaceholder,
+  onClearAll,
 }: IMultiselect<T>) {
   return (
     <div className="min-w-[300px]">
@@ -70,24 +72,37 @@ export function Multiselect<T>({
                   Nenhuma opção selecionada
                 </p>
               ) : (
-                selectedOptions.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-2 bg-white rounded-full border border-blue-600 px-3 py-1"
-                  >
-                    <span>{_.get(item, optionLabel as string)}</span>
+                <>
+                  {selectedOptions.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 bg-white rounded-full border border-blue-600 px-3 py-1"
+                    >
+                      <span>{_.get(item, optionLabel as string)}</span>
+                      <Button
+                        variant="ghost"
+                        className="rounded-full w-6 h-6 p-0"
+                        onClick={() => onRemove(item)}
+                      >
+                        <IoIosCloseCircleOutline
+                          color="black"
+                          className="w-6 h-6"
+                        />
+                      </Button>
+                    </div>
+                  ))}
+
+                  {onClearAll && (
                     <Button
                       variant="ghost"
-                      className="rounded-full w-6 h-6 p-0"
-                      onClick={() => onRemove(item)}
+                      size="sm"
+                      className="text-sm hover:underline"
+                      onClick={onClearAll}
                     >
-                      <IoIosCloseCircleOutline
-                        color="black"
-                        className="w-6 h-6"
-                      />
+                      Clear all
                     </Button>
-                  </div>
-                ))
+                  )}
+                </>
               )}
             </div>
           </div>

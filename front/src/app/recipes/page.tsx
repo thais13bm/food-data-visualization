@@ -182,6 +182,7 @@ export default function RecipesPage() {
               onRemove={handleRemove}
               buttonPlaceholder="Select categories"
               filterPlaceholder="Filter categories..."
+              onClearAll={() => setSelectedCategories([])}
             />
           </div>
         )}

@@ -20,6 +20,10 @@ export default function RecipeDashboard({
   const wordCloudRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [chartLoading, setChartLoading] = useState(true);
+  const allCategories = [...new Set(data.map((d) => d.RecipeCategory))].sort();
+  const activeCategories = selectedCategories.includes("All")
+    ? allCategories
+    : selectedCategories;
 
   useEffect(() => {
     const resize = () => {
@@ -40,7 +44,7 @@ export default function RecipeDashboard({
 
     const filtered = data.filter(
       (d) =>
-        selectedCategories.includes(d.RecipeCategory) &&
+        activeCategories.includes(d.RecipeCategory) &&
         d["Calories (kcal)"] &&
         d["ProteinContent (g)"] &&
         d["FatContent (g)"]
@@ -125,7 +129,7 @@ export default function RecipeDashboard({
         {
           title: "Scatter Plot",
           data: { values: filteredWithImages },
-          width: containerWidth / 3 - 15 -100,
+          width: containerWidth / 3 - 15 - 100,
           height: 250,
           // transform: [{ filter: { selection: "selectPoint" } }],
           params: [

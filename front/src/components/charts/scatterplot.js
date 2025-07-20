@@ -114,7 +114,7 @@ export default function ScatterPlot({
         color: {
           field: "RecipeCategory",
           type: "nominal",
-          legend: { title: "Category" },
+          legend: { title: "Category", symbolLimit: 10 },
         },
         tooltip: [
           { field: "RecipeCategory", title: "Category" },

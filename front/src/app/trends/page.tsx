@@ -71,7 +71,6 @@ export default function RecipesPage() {
   const [ascending, setAscending] = useState(false);
   const [filterMode, setFilterMode] = useState("treemap");
   const [selectedCountryIds, setSelectedCountryIds] = useState<number[]>([]);
-  const [brushedData, setBrushedData] = useState([]);
 
   const countriesWithRecipes = Array.from(
     new Set(
@@ -199,6 +198,7 @@ export default function RecipesPage() {
                     onRemove={handleRemove}
                     buttonPlaceholder="Select categories"
                     filterPlaceholder="Filter categories..."
+                    onClearAll={() => setSelectedCategories([])}
                   />
                 </div>
               )}
