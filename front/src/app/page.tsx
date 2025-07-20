@@ -64,11 +64,25 @@ export default function Home() {
           <Card className="h-full hover:shadow-lg transition cursor-pointer bg-blue-50">
             <CardHeader>
               <CardTitle className="text-xl font-semibold">
-                General vision
+                Recipes insights
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p>Quick summary with basic charts about the recipe dataset.</p>
+              <p>Individual recipes</p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        
+        <Link href="/trends" className="h-full">
+          <Card className="h-full hover:shadow-lg transition cursor-pointer bg-blue-50">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold">
+                Categories nutrients
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Analysis by dish type: dessert, vegetables etc.</p>
             </CardContent>
           </Card>
         </Link>
@@ -86,18 +100,6 @@ export default function Home() {
           </Card>
         </Link>
 
-        <Link href="/trends" className="h-full">
-          <Card className="h-full hover:shadow-lg transition cursor-pointer bg-blue-50">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold">
-                Categories
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>Analysis by dish type: sweet, savory, vegan, etc.</p>
-            </CardContent>
-          </Card>
-        </Link>
       </section>
     </div>
   );
