@@ -166,20 +166,20 @@ function ForceGraph(
   if (G && color && nodeGroups) {
     const legend = svg
       .append("g")
-      .attr("transform", `translate(${-width / 2 + 20}, ${-height / 2 + 20})`);
-
+      .attr("transform", `translate(${-width / 2 }, ${-height/1.5 })`);
+      
     const legendItems = nodeGroups.concat("ingredient");
 
     legendItems.forEach((group, i) => {
       const g = legend.append("g").attr("transform", `translate(0, ${i * 20})`);
       g.append("circle")
-        .attr("r", 6)
-        .attr("fill", group === "ingredient" ? "#666" : color(group));
+        .attr("r", 8)
+        .attr("fill", color(group));
       g.append("text")
         .text(group === "ingredient" ? "Ingredient" : group)
-        .attr("x", 12)
-        .attr("y", 4)
-        .attr("font-size", 12);
+        .attr("x", 14)
+        .attr("y", 8)
+        .attr("font-size", 22);
     });
   }
 
