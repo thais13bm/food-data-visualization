@@ -14,21 +14,21 @@ export default function ScatterPlot({
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [chartHeight, setChartHeight] = useState(0);
   const [chartLoading, setChartLoading] = useState(true);
 
   const margin = { left: 20, right: 20 };
-  const height = 300;
 
   useEffect(() => {
-    console.log("ScatterPlot - primeiro loading");
     const resize = () => {
       if (containerRef.current) {
         const width =
           containerRef.current.getBoundingClientRect().width -
           margin.left -
           margin.right -
-          120; // legenda
+          90; // legenda
         setContainerWidth(width);
+        setChartHeight(width * 0.4625 + 50);
       }
     };
 
@@ -98,7 +98,7 @@ export default function ScatterPlot({
     const spec = {
       data: { values: categoryAgg },
       width: containerWidth,
-      height: height,
+      height: chartHeight,
       mark: "point",
       encoding: {
         x: {
@@ -136,7 +136,7 @@ export default function ScatterPlot({
   }, [data, selectedCategories, xField, yField, containerWidth]);
 
   return (
-    <div ref={containerRef} className="w-full h-[350px] relative">
+    <div ref={containerRef} className="w-full relative">
       {chartLoading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
           <LoadingOverlay variant="neutral" />

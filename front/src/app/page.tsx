@@ -59,9 +59,9 @@ export default function Home() {
           );
         })()}
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <Link href="/recipes">
-          <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+        <Link href="/recipes" className="h-full">
+          <Card className="h-full hover:shadow-lg transition cursor-pointer bg-blue-50">
             <CardHeader>
               <CardTitle className="text-xl font-semibold">
                 General vision
@@ -72,23 +72,32 @@ export default function Home() {
             </CardContent>
           </Card>
         </Link>
-        <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
-          <CardHeader>
-            <CardTitle className="text-xl font-semibold">Ingredients</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>Distribution of most used ingredients</p>
-          </CardContent>
-        </Card>
 
-        <Card className="hover:shadow-lg transition cursor-pointer bg-blue-50">
-          <CardHeader>
-            <CardTitle className="text-xl font-semibold">Categories</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>Analysis by dish type: sweet, savory, vegan, etc.</p>
-          </CardContent>
-        </Card>
+        <Link href="/ingredients" className="h-full">
+          <Card className="h-full hover:shadow-lg transition cursor-pointer bg-blue-50">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold">
+                Ingredients
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Distribution of most used ingredients</p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href="/trends" className="h-full">
+          <Card className="h-full hover:shadow-lg transition cursor-pointer bg-blue-50">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold">
+                Categories
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Analysis by dish type: sweet, savory, vegan, etc.</p>
+            </CardContent>
+          </Card>
+        </Link>
       </section>
     </div>
   );

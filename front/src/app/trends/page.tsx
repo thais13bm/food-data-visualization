@@ -291,287 +291,299 @@ export default function RecipesPage() {
 
               <div className="w-full overflow-x-auto pb-6">
                 <div className="flex flex-row gap-4 min-w-[1200px] px-2">
-                {/* Bar Chart */}
-                <div className = "w-[33.33%] min-w-[400px]">
-                  <Card>
-                    <CardHeader className="text-center">
-                      <CardTitle>BarChart</CardTitle>
-                    </CardHeader>
-                    <div className="pl-4 pb-4 flex items-center gap-6">
-                      {/* Campo X Field */}
-                      <div className="w-full max-w-[200px]">
-                        <label className="text-base font-semibold">X Field</label>
-                        <Select
-                          value={xFieldBarChart}
-                          onValueChange={setXFieldBarChart}
-                        >
-                          <SelectTrigger className="w-full h-9 text-sm">
-                            <SelectValue placeholder="Choose the field" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="AggregatedRating">
-                              Aggregated Rating
-                            </SelectItem>
-                            <SelectItem value="ReviewCount">
-                              Review Count
-                            </SelectItem>
-                            <SelectItem value="Calories (kcal)">
-                              Calories (kcal)
-                            </SelectItem>
-                            <SelectItem value="FatContent (g)">
-                              Fat Content
-                            </SelectItem>
-                            <SelectItem value="SaturatedFatContent (g)">
-                              Saturated Fat Content
-                            </SelectItem>
-                            <SelectItem value="CholesterolContent (mg)">
-                              Cholesterol Content
-                            </SelectItem>
-                            <SelectItem value="SodiumContent (mg)">
-                              Sodium Content
-                            </SelectItem>
-                            <SelectItem value="CarbohydrateContent (g)">
-                              Carbohydrate Content
-                            </SelectItem>
-                            <SelectItem value="FiberContent (g)">
-                              Fiber Content
-                            </SelectItem>
-                            <SelectItem value="SugarContent (g)">
-                              Sugar Content
-                            </SelectItem>
-                            <SelectItem value="ProteinContent (g)">
-                              Protein Content
-                            </SelectItem>
-                            <SelectItem value="RecipeServings">
-                              Recipe Servings
-                            </SelectItem>
-                            <SelectItem value="NumIngredients">
-                              Number of Ingredients
-                            </SelectItem>
-                            <SelectItem value="CookTime_hours">
-                              Cook Time (hours)
-                            </SelectItem>
-                            <SelectItem value="PrepTime_hours">
-                              Prep Time (hours)
-                            </SelectItem>
-                            <SelectItem value="TotalTime_hours">
-                              Total Time (hours)
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
+                  {/* Bar Chart */}
+                  <div className="w-[33.33%] min-w-[400px]">
+                    <Card>
+                      <CardHeader className="text-center">
+                        <CardTitle>BarChart</CardTitle>
+                      </CardHeader>
+                      <div className="pl-4 pb-4 flex items-center gap-6">
+                        {/* Campo X Field */}
+                        <div className="w-full max-w-[200px]">
+                          <label className="text-base font-semibold">
+                            X Field
+                          </label>
+                          <Select
+                            value={xFieldBarChart}
+                            onValueChange={setXFieldBarChart}
+                          >
+                            <SelectTrigger className="w-full h-9 text-sm">
+                              <SelectValue placeholder="Choose the field" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="AggregatedRating">
+                                Aggregated Rating
+                              </SelectItem>
+                              <SelectItem value="ReviewCount">
+                                Review Count
+                              </SelectItem>
+                              <SelectItem value="Calories (kcal)">
+                                Calories (kcal)
+                              </SelectItem>
+                              <SelectItem value="FatContent (g)">
+                                Fat Content
+                              </SelectItem>
+                              <SelectItem value="SaturatedFatContent (g)">
+                                Saturated Fat Content
+                              </SelectItem>
+                              <SelectItem value="CholesterolContent (mg)">
+                                Cholesterol Content
+                              </SelectItem>
+                              <SelectItem value="SodiumContent (mg)">
+                                Sodium Content
+                              </SelectItem>
+                              <SelectItem value="CarbohydrateContent (g)">
+                                Carbohydrate Content
+                              </SelectItem>
+                              <SelectItem value="FiberContent (g)">
+                                Fiber Content
+                              </SelectItem>
+                              <SelectItem value="SugarContent (g)">
+                                Sugar Content
+                              </SelectItem>
+                              <SelectItem value="ProteinContent (g)">
+                                Protein Content
+                              </SelectItem>
+                              <SelectItem value="RecipeServings">
+                                Recipe Servings
+                              </SelectItem>
+                              <SelectItem value="NumIngredients">
+                                Number of Ingredients
+                              </SelectItem>
+                              <SelectItem value="CookTime_hours">
+                                Cook Time (hours)
+                              </SelectItem>
+                              <SelectItem value="PrepTime_hours">
+                                Prep Time (hours)
+                              </SelectItem>
+                              <SelectItem value="TotalTime_hours">
+                                Total Time (hours)
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Campo Quantity */}
+                        <div className="w-full max-w-[200px]">
+                          <label
+                            htmlFor="topN"
+                            className="text-base font-semibold"
+                          >
+                            Quantity
+                          </label>
+                          <input
+                            id="topN"
+                            type="number"
+                            min={1}
+                            max={50}
+                            value={topN}
+                            onChange={(e) => setTopN(Number(e.target.value))}
+                            className="border rounded p-2 w-full h-9 text-center"
+                          />
+                        </div>
+
+                        <div className="w-full max-w-[200px] pt-6">
+                          {/* <label className="text-base font-semibold">Order</label> */}
+                          <button
+                            onClick={() => setAscending((prev) => !prev)}
+                            className="w-9 h-9 border rounded flex items-center justify-center transition-colors hover:bg-muted"
+                            title={
+                              ascending
+                                ? "Sort ascending (smallest on top)"
+                                : "Sort descending (largest on top)"
+                            }
+                          >
+                            {ascending ? (
+                              <ArrowDownIcon className="w-5 h-5" />
+                            ) : (
+                              <ArrowUpIcon className="w-5 h-5" />
+                            )}
+                          </button>
+                        </div>
                       </div>
 
-                      {/* Campo Quantity */}
-                      <div className="w-full max-w-[200px]">
-                        <label htmlFor="topN" className="text-base font-semibold">
-                          Quantity
-                        </label>
-                        <input
-                          id="topN"
-                          type="number"
-                          min={1}
-                          max={50}
-                          value={topN}
-                          onChange={(e) => setTopN(Number(e.target.value))}
-                          className="border rounded p-2 w-full h-9 text-center"
-                        />
-                      </div>
-
-                      <div className="w-full max-w-[200px] pt-6">
-                        {/* <label className="text-base font-semibold">Order</label> */}
-                        <button
-                          onClick={() => setAscending((prev) => !prev)}
-                          className="w-9 h-9 border rounded flex items-center justify-center transition-colors hover:bg-muted"
-                          title={
-                            ascending
-                              ? "Sort ascending (smallest on top)"
-                              : "Sort descending (largest on top)"
-                          }
-                        >
-                          {ascending ? (
-                            <ArrowDownIcon className="w-5 h-5" />
-                          ) : (
-                            <ArrowUpIcon className="w-5 h-5" />
+                      <CardContent className="w-full min-w-0  relative overflow-hidden">
+                        <BarChart
+                          data={data}
+                          selectedCategories={selectedCategories.map(
+                            (c) => c.name
                           )}
-                        </button>
+                          topN={topN}
+                          xField={xFieldBarChart}
+                          ascending={ascending}
+                        />
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* Scatter Plot */}
+                  <div className="w-[33.33%] min-w-[400px]">
+                    <Card>
+                      <CardHeader className="text-center">
+                        <CardTitle>ScatterPlot</CardTitle>
+                      </CardHeader>
+                      <div className="pl-4 pb-4 flex flex-wrap items-center gap-6">
+                        {/* Campo X Field */}
+                        <div className="w-full max-w-[200px]">
+                          <label className="text-base font-semibold">
+                            X Field
+                          </label>
+                          <Select
+                            value={xFieldScatterPlot}
+                            onValueChange={setXFieldScatterPlot}
+                          >
+                            <SelectTrigger className="w-full h-9 text-sm">
+                              <SelectValue placeholder="Choose the field" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="AggregatedRating">
+                                Aggregated Rating
+                              </SelectItem>
+                              <SelectItem value="ReviewCount">
+                                Review Count
+                              </SelectItem>
+                              <SelectItem value="Calories (kcal)">
+                                Calories (kcal)
+                              </SelectItem>
+                              <SelectItem value="FatContent (g)">
+                                Fat Content
+                              </SelectItem>
+                              <SelectItem value="SaturatedFatContent (g)">
+                                Saturated Fat Content
+                              </SelectItem>
+                              <SelectItem value="CholesterolContent (mg)">
+                                Cholesterol Content
+                              </SelectItem>
+                              <SelectItem value="SodiumContent (mg)">
+                                Sodium Content
+                              </SelectItem>
+                              <SelectItem value="CarbohydrateContent (g)">
+                                Carbohydrate Content
+                              </SelectItem>
+                              <SelectItem value="FiberContent (g)">
+                                Fiber Content
+                              </SelectItem>
+                              <SelectItem value="SugarContent (g)">
+                                Sugar Content
+                              </SelectItem>
+                              <SelectItem value="ProteinContent (g)">
+                                Protein Content
+                              </SelectItem>
+                              <SelectItem value="RecipeServings">
+                                Recipe Servings
+                              </SelectItem>
+                              <SelectItem value="NumIngredients">
+                                Number of Ingredients
+                              </SelectItem>
+                              <SelectItem value="CookTime_hours">
+                                Cook Time (hours)
+                              </SelectItem>
+                              <SelectItem value="PrepTime_hours">
+                                Prep Time (hours)
+                              </SelectItem>
+                              <SelectItem value="TotalTime_hours">
+                                Total Time (hours)
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Campo Y Field */}
+                        <div className="w-full max-w-[200px]">
+                          <label className="text-base font-semibold">
+                            Y Field
+                          </label>
+                          <Select value={yField} onValueChange={setYField}>
+                            <SelectTrigger className="w-full h-9 text-sm">
+                              <SelectValue placeholder="Choose the field" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="AggregatedRating">
+                                Aggregated Rating
+                              </SelectItem>
+                              <SelectItem value="ReviewCount">
+                                Review Count
+                              </SelectItem>
+                              <SelectItem value="Calories (kcal)">
+                                Calories (kcal)
+                              </SelectItem>
+                              <SelectItem value="FatContent (g)">
+                                Fat Content
+                              </SelectItem>
+                              <SelectItem value="SaturatedFatContent (g)">
+                                Saturated Fat Content
+                              </SelectItem>
+                              <SelectItem value="CholesterolContent (mg)">
+                                Cholesterol Content
+                              </SelectItem>
+                              <SelectItem value="SodiumContent (mg)">
+                                Sodium Content
+                              </SelectItem>
+                              <SelectItem value="CarbohydrateContent (g)">
+                                Carbohydrate Content
+                              </SelectItem>
+                              <SelectItem value="FiberContent (g)">
+                                Fiber Content
+                              </SelectItem>
+                              <SelectItem value="SugarContent (g)">
+                                Sugar Content
+                              </SelectItem>
+                              <SelectItem value="ProteinContent (g)">
+                                Protein Content
+                              </SelectItem>
+                              <SelectItem value="RecipeServings">
+                                Recipe Servings
+                              </SelectItem>
+                              <SelectItem value="NumIngredients">
+                                Number of Ingredients
+                              </SelectItem>
+                              <SelectItem value="CookTime_hours">
+                                Cook Time (hours)
+                              </SelectItem>
+                              <SelectItem value="PrepTime_hours">
+                                Prep Time (hours)
+                              </SelectItem>
+                              <SelectItem value="TotalTime_hours">
+                                Total Time (hours)
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
-                    </div>
 
-                    <CardContent className="w-full min-w-0 min-h-[300px] relative overflow-hidden">
-                      <BarChart
-                        data={data}
-                        selectedCategories={selectedCategories.map((c) => c.name)}
-                        topN={topN}
-                        xField={xFieldBarChart}
-                        ascending={ascending}
-                      />
-                    </CardContent>
-                  </Card>
+                      <CardContent className="w-full min-w-0 overflow-hidden">
+                        <ScatterPlot
+                          data={data}
+                          selectedCategories={selectedCategories.map(
+                            (c) => c.name
+                          )}
+                          xField={xFieldScatterPlot}
+                          yField={yField}
+                        />
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* Parallel Coordinates */}
+                  <div className="w-[33.33%] min-w-[400px]">
+                    <Card>
+                      <CardHeader className="text-center">
+                        <CardTitle>
+                          Parallel coordinates : avg nutrients
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ParallelCoordinatesChart
+                          data={data}
+                          selectedCategories={selectedCategories.map(
+                            (c) => c.name
+                          )}
+                        />
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
-
-                {/* Scatter Plot */}
-                <div className= "w-[33.33%] min-w-[400px]">
-                  <Card>
-                    <CardHeader className="text-center">
-                      <CardTitle>ScatterPlot</CardTitle>
-                    </CardHeader>
-                    <div className="pl-4 pb-4 flex flex-wrap items-center gap-6">
-                      {/* Campo X Field */}
-                      <div className="w-full max-w-[200px]">
-                        <label className="text-base font-semibold">X Field</label>
-                        <Select
-                          value={xFieldScatterPlot}
-                          onValueChange={setXFieldScatterPlot}
-                        >
-                          <SelectTrigger className="w-full h-9 text-sm">
-                            <SelectValue placeholder="Choose the field" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="AggregatedRating">
-                              Aggregated Rating
-                            </SelectItem>
-                            <SelectItem value="ReviewCount">
-                              Review Count
-                            </SelectItem>
-                            <SelectItem value="Calories (kcal)">
-                              Calories (kcal)
-                            </SelectItem>
-                            <SelectItem value="FatContent (g)">
-                              Fat Content
-                            </SelectItem>
-                            <SelectItem value="SaturatedFatContent (g)">
-                              Saturated Fat Content
-                            </SelectItem>
-                            <SelectItem value="CholesterolContent (mg)">
-                              Cholesterol Content
-                            </SelectItem>
-                            <SelectItem value="SodiumContent (mg)">
-                              Sodium Content
-                            </SelectItem>
-                            <SelectItem value="CarbohydrateContent (g)">
-                              Carbohydrate Content
-                            </SelectItem>
-                            <SelectItem value="FiberContent (g)">
-                              Fiber Content
-                            </SelectItem>
-                            <SelectItem value="SugarContent (g)">
-                              Sugar Content
-                            </SelectItem>
-                            <SelectItem value="ProteinContent (g)">
-                              Protein Content
-                            </SelectItem>
-                            <SelectItem value="RecipeServings">
-                              Recipe Servings
-                            </SelectItem>
-                            <SelectItem value="NumIngredients">
-                              Number of Ingredients
-                            </SelectItem>
-                            <SelectItem value="CookTime_hours">
-                              Cook Time (hours)
-                            </SelectItem>
-                            <SelectItem value="PrepTime_hours">
-                              Prep Time (hours)
-                            </SelectItem>
-                            <SelectItem value="TotalTime_hours">
-                              Total Time (hours)
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      {/* Campo Y Field */}
-                      <div className="w-full max-w-[200px]">
-                        <label className="text-base font-semibold">Y Field</label>
-                        <Select value={yField} onValueChange={setYField}>
-                          <SelectTrigger className="w-full h-9 text-sm">
-                            <SelectValue placeholder="Choose the field" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="AggregatedRating">
-                              Aggregated Rating
-                            </SelectItem>
-                            <SelectItem value="ReviewCount">
-                              Review Count
-                            </SelectItem>
-                            <SelectItem value="Calories (kcal)">
-                              Calories (kcal)
-                            </SelectItem>
-                            <SelectItem value="FatContent (g)">
-                              Fat Content
-                            </SelectItem>
-                            <SelectItem value="SaturatedFatContent (g)">
-                              Saturated Fat Content
-                            </SelectItem>
-                            <SelectItem value="CholesterolContent (mg)">
-                              Cholesterol Content
-                            </SelectItem>
-                            <SelectItem value="SodiumContent (mg)">
-                              Sodium Content
-                            </SelectItem>
-                            <SelectItem value="CarbohydrateContent (g)">
-                              Carbohydrate Content
-                            </SelectItem>
-                            <SelectItem value="FiberContent (g)">
-                              Fiber Content
-                            </SelectItem>
-                            <SelectItem value="SugarContent (g)">
-                              Sugar Content
-                            </SelectItem>
-                            <SelectItem value="ProteinContent (g)">
-                              Protein Content
-                            </SelectItem>
-                            <SelectItem value="RecipeServings">
-                              Recipe Servings
-                            </SelectItem>
-                            <SelectItem value="NumIngredients">
-                              Number of Ingredients
-                            </SelectItem>
-                            <SelectItem value="CookTime_hours">
-                              Cook Time (hours)
-                            </SelectItem>
-                            <SelectItem value="PrepTime_hours">
-                              Prep Time (hours)
-                            </SelectItem>
-                            <SelectItem value="TotalTime_hours">
-                              Total Time (hours)
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <CardContent className="w-full min-w-0 overflow-hidden">
-                      <ScatterPlot
-                        data={data}
-                        selectedCategories={selectedCategories.map((c) => c.name)}
-                        xField={xFieldScatterPlot}
-                        yField={yField}
-                      />
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Parallel Coordinates */}
-                <div className = "w-[33.33%] min-w-[400px]">
-                  <Card>
-                    <CardHeader className="text-center">
-                      <CardTitle>Parallel coordinates : avg nutrients</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <ParallelCoordinatesChart
-                        data={data}
-                        selectedCategories={selectedCategories.map((c) => c.name)}
-                      />
-                    </CardContent>
-                  </Card>
-                </div>
-                </div>
-              </div>  
-
-
-
-
-
+              </div>
             </div>
             {/* Word Cloud */}
             {/* <div className="flex-1 ">
@@ -587,11 +599,7 @@ export default function RecipesPage() {
                 </CardContent>
               </Card>
             </div> */}
-
-            
           </div>
-
-          
         </div>
       </div>
     </>

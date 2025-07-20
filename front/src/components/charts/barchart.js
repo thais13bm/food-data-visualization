@@ -15,25 +15,16 @@ export default function BarChart({
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [chartHeight, setChartHeight] = useState(0);
   const [chartLoading, setChartLoading] = useState(true);
-
-  const containerMaxHeight = 350; // altura fixa do "card"
-  const minBarHeight = 40; // altura mínima que uma barra deve ter
-
-  // Calcula altura do gráfico baseado no número de barras e mantendo altura mínima da barra
-  const calculatedBarHeight =
-    topN > 0 ? containerMaxHeight / topN : containerMaxHeight;
-  const barHeight =
-    calculatedBarHeight < minBarHeight ? minBarHeight : calculatedBarHeight;
-
-  // Se a barra mínima for atingida, aumentamos a altura total do gráfico
-  const chartHeight = barHeight * topN;
+  const minBarHeight = 15;
 
   useEffect(() => {
     const resize = () => {
       if (containerRef.current) {
         const width = containerRef.current.getBoundingClientRect().width - 30;
         setContainerWidth(width);
+        setChartHeight(width * 0.4625 + 50);
       }
     };
 
@@ -44,6 +35,12 @@ export default function BarChart({
 
     return () => observer.disconnect();
   }, []);
+
+  // Calcula altura do gráfico baseado no número de barras e mantendo altura mínima da barra
+  const calculatedBarHeight =
+    topN > 0 ? chartHeight / topN - 20 : chartHeight - 20;
+  const barHeight =
+    calculatedBarHeight < minBarHeight ? minBarHeight : calculatedBarHeight;
 
   useEffect(() => {
     if (!chartRef.current || containerWidth === 0) return;
@@ -130,7 +127,7 @@ export default function BarChart({
       .height(chartHeight)
       .autosize({ type: "fit", contains: "padding" })
       .config({
-        padding: { left: 20, right: 10, bottom: 10, top: 10 },
+        padding: { left: 20, right: 10, bottom: 0, top: 10 },
         bar: { continuousBandSize: barHeight * 0.8 }, // Define a largura da banda vertical
       })
       .toSpec();
@@ -145,21 +142,13 @@ export default function BarChart({
   }, [data, selectedCategories, topN, xField, containerWidth]);
 
   return (
-    <div
-      ref={containerRef}
-      className="w-full relative overflow-y-auto"
-      style={{ maxHeight: containerMaxHeight }}
-    >
+    <div ref={containerRef} className="w-full relative overflow-y-auto">
       {chartLoading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
           <LoadingOverlay variant="neutral" />
         </div>
       )}
-      <div
-        ref={chartRef}
-        className="w-full"
-        style={{ height: chartHeight, minHeight: chartHeight }}
-      />
+      <div ref={chartRef} className="w-full" />
     </div>
   );
 }

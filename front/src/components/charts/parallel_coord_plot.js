@@ -10,7 +10,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
   const chartRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [chartLoading, setChartLoading] = useState(true);
-  const height = 200;
+  const [chartHeight, setChartHeight] = useState(0);
 
   const metrics = [
     "Calories (kcal)",
@@ -23,9 +23,9 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
   useEffect(() => {
     const resize = () => {
       if (containerRef.current) {
-        setContainerWidth(
-          containerRef.current.getBoundingClientRect().width - 10
-        );
+        const width = containerRef.current.getBoundingClientRect().width - 20;
+        setContainerWidth(width);
+        setChartHeight(width * 0.4625);
       }
     };
     resize();
@@ -132,7 +132,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
             },
           ],
           width: containerWidth,
-          height: height,
+          height: chartHeight,
           layer: [
             {
               mark: { type: "rule", color: "#ccc" },
@@ -142,7 +142,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
                   field: "key",
                   axis: {
                     labelFontSize: 10,
-                    labelAngle: 40,
+                    labelAngle: 20,
                     domain: false,
                     title: null,
                   },
@@ -212,7 +212,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
             ...[0, 0.5, 1].map((pos) => ({
               encoding: {
                 x: { type: "nominal", field: "key" },
-                y: { value: height * pos },
+                y: { value: chartHeight * pos },
               },
               layer: [
                 {
@@ -247,7 +247,7 @@ export default function ParallelCoordinatesChart({ data, selectedCategories }) {
   }, [data, selectedCategories, containerWidth]);
 
   return (
-    <div ref={containerRef} className="w-full h-[350px] relative">
+    <div ref={containerRef} className="w-full relative">
       {chartLoading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
           <LoadingOverlay variant="neutral" />
