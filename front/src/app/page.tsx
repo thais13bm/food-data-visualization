@@ -100,6 +100,19 @@ export default function Home() {
           </Card>
         </Link>
 
+        <Link href="/time_series" className="h-full">
+          <Card className="h-full hover:shadow-lg transition cursor-pointer bg-blue-50">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold">
+                Time series
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Temporal analysis</p>
+            </CardContent>
+          </Card>
+        </Link>
+
       </section>
     </div>
   );

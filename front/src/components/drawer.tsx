@@ -45,6 +45,13 @@ export default function Drawer({ open, onClose }: DrawerProps) {
           >
             Ingredients
           </Link>
+          <Link
+            href="/time_series"
+            onClick={onClose}
+            className="hover:text-teal-600"
+          >
+            Time series
+          </Link>
         </nav>
       </aside>
     </>
