@@ -5,12 +5,17 @@ Website for food data visualization
 
 Install dependencies in package.json
 
-Go to /front
+Then on root folder:
 
-On terminal:
+```
+cd front
+```
+
 
 ```
 npm run build
+
+npm start
 
 ```
 
