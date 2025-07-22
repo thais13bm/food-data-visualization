@@ -20,7 +20,7 @@ export default function Drawer({ open, onClose }: DrawerProps) {
         }`}
       >
         <nav className="flex flex-col p-6 gap-6 text-gray-900">
-          <h2 className="text-2xl font-bold mb-8 text-teal-600">RecipeVis</h2>
+          <h2 className="text-2xl font-bold mb-8 text-teal-600">RecipeViz</h2>
           <Link href="/" onClick={onClose} className="hover:text-teal-600">
             Home
           </Link>

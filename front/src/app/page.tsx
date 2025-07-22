@@ -26,7 +26,16 @@ export default function Home() {
         <h2 className="text-4xl font-extrabold mb-2">Welcome to RecipeViz!</h2>
         <p className="text-lg text-gray-700">
           Interactive web system for recipe analysis. Explore data
-          visualizations and discover interesting insights. (Source: Food.com)
+          visualizations and discover interesting insights. (Source:{" "}
+          <a
+            href="https://www.food.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline hover:text-blue-800"
+          >
+            Food.com
+          </a>
+          )
         </p>
       </header>
 
